@@ -8,7 +8,9 @@ vim_session:
 
 ######################################################################
 
-pkginit.Rout: pkginit.R
+Sources += $(wildcard *.md)
+Sources += $(wildcard *.R R/*.R)
+Sources += $(wildcard man/*.Rd) NAMESPACE DESCRIPTION
 
 ######################################################################
 
