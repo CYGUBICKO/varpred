@@ -12,6 +12,7 @@ Sources += $(wildcard *.md)
 Sources += $(wildcard vignettes/*.md)
 Sources += $(wildcard *.R R/*.R)
 Sources += $(wildcard man/*.Rd) NAMESPACE DESCRIPTION
+Sources += $(wildcard docs/*)
 
 ######################################################################
 
