@@ -2,6 +2,8 @@
 # varpred
 
 <!-- badges: start -->
+[![Travis build status](https://travis-ci.com/CYGUBICKO/varpred.svg?branch=main)](https://travis-ci.com/CYGUBICKO/varpred)
+[![CRAN status](https://www.r-pkg.org/badges/version/varpred)](https://CRAN.R-project.org/package=varpred)
 <!-- badges: end -->
 
 The goal of varpred is to ...

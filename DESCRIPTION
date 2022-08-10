@@ -1,10 +1,10 @@
 Package: varpred
-Title: What the Package Does (One Line, Title Case)
+Title: Outcome Plots
 Version: 0.0.0.9000
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: Generates mean-based and observed-value-based prediction and effect plots; and performs bias correction in central estimates for generalized models involving non-linear link functions, including models with random effects.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

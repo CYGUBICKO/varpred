@@ -1,0 +1,7 @@
+pandoc: 2.9.1.1
+pkgdown: 2.0.6
+pkgdown_sha: ~
+articles:
+  vapred_intro: vapred_intro.html
+last_built: 2022-08-09T19:43Z
+
