@@ -14,6 +14,13 @@ Sources += $(wildcard *.R R/*.R)
 Sources += $(wildcard man/*.Rd) NAMESPACE DESCRIPTION
 Sources += $(wildcard docs/*)
 
+Sources += README.md 
+
+######################################################################
+
+pkg-site:
+	echo "pkgdown::build_site()" | R --slave
+
 ######################################################################
 
 ### Makestuff

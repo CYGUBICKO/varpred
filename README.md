@@ -4,6 +4,7 @@
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/CYGUBICKO/varpred.svg?branch=main)](https://travis-ci.com/CYGUBICKO/varpred)
 [![CRAN status](https://www.r-pkg.org/badges/version/varpred)](https://CRAN.R-project.org/package=varpred)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of varpred is to ...
