@@ -1,9 +1,20 @@
 Package: varpred
 Title: Outcome Plots
-Version: 0.0.0.9000
+Version: 1.0.1
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+	c(person("Bicko","Cygu", 
+		role=c("aut","cre"),
+		email="cygubicko@gmail.com",
+		comment=c(ORCID = "0000-0002-9284-8863")),
+	 person("Ben","Bolker",
+		role="aut",
+		comment=c(ORCID="0000-0002-2127-0443")),
+	 person("Jonathan","Dushoff",
+		role="aut",
+		comment=c(ORCID="0000-0000-0000-0000")),
+	 person("John", "Fox", 
+		role="cph", 
+		comment = "matrix.to.df and get_model_matrix functions implementation copied from package effects"))
 Description: Generates mean-based and observed-value-based prediction and effect plots; and performs bias correction in central estimates for generalized models involving non-linear link functions, including models with random effects.
 License: MIT + file LICENSE
 Encoding: UTF-8

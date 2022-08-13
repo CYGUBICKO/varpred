@@ -25,6 +25,45 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/as.data.frame.varpred.html</loc>
+  </url>
+  <url>
+    <loc>/reference/combinevarpred.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data.frame.varpred.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getmeans.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getmeans.varpred.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pkgsExport.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plot.vareffects.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plot.varpred.html</loc>
+  </url>
+  <url>
+    <loc>/reference/print.varpred.html</loc>
+  </url>
+  <url>
+    <loc>/reference/recoverdata.html</loc>
+  </url>
+  <url>
+    <loc>/reference/varefftheme.html</loc>
+  </url>
+  <url>
+    <loc>/reference/varpred.html</loc>
+  </url>
+  <url>
+    <loc>/reference/zero_vcov.html</loc>
   </url>
 </urlset>

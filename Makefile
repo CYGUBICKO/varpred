@@ -18,8 +18,33 @@ Sources += README.md
 
 ######################################################################
 
+## Package main functions
+varpred.Rout: R/varpred.R
+helperfuns.Rout: R/helperfuns.R
+supported.Rout: R/supported.R
+plotsfuns.Rout: R/plotsfuns.R
+methodfuns.Rout: R/methodfuns.R
+pkgsExport.Rout: R/pkgsExport.R
+
+######################################################################
+
+install:
+	make update-doc && make build-package && make install-tarball && make pkg-site
+
 pkg-site:
 	echo "pkgdown::build_site()" | R --slave
+
+build-package:
+	R CMD build .
+
+install-tarball:
+	R CMD INSTALL varpred_1.0.1.*
+
+check-package:
+	echo "devtools::check('.')" | R --slave
+
+update-doc:
+	echo "devtools::document('.')" | R --slave
 
 ######################################################################
 
