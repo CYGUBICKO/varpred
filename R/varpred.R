@@ -1,6 +1,6 @@
 #' Prediction and effect estimates
 #'
-#' Computes predictor effect for generalized linear (mixed) models together with the associated confidence intervals anchored on some values, mostly, model center. It also incorporates proaches for correcting bias in predictions for GL(M)Ms involving nonlinear link functions.
+#' Computes central estimates, prediction and effect estimates for a particular focal predictor.
 #'
 #' @details
 #' Predictor effects computes \code{E(Y|X)} by meaningfully holding the non-focal predictors constant (or averaged in some meaningful way) while varying the focal predictor, with the goal that the response (\code{E(Y|X)}) represents how the model responds to the changes in the focal predictor.
