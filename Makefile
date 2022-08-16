@@ -8,11 +8,11 @@ vim_session:
 
 ######################################################################
 
-Sources += $(wildcard *.md)
+Sources += $(wildcard *.md *.yml)
 Sources += $(wildcard vignettes/*.md)
 Sources += $(wildcard *.R R/*.R)
 Sources += $(wildcard man/*.Rd) NAMESPACE DESCRIPTION
-Sources += $(wildcard docs/*)
+Sources += $(wildcard docs/*.*)
 
 Sources += README.md 
 
