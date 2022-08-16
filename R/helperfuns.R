@@ -200,7 +200,7 @@ get_sderror <- function(mod, vcov., mm, col_mean, isolate, isolate.value, intern
 	# (Centered) predictions for SEs
 	## Center model matrix
 	if (isolate) {
-		if (bias.adjust %in% c("none", "delta", "mcculloch", "diggle", "logitnorm")) {
+		if (bias.adjust %in% c("none", "taylor")) {
 			mm_mean <- t(replicate(NROW(mm), col_mean))
 		} else {
 			.xx <- mf[[x.var]]
@@ -222,7 +222,7 @@ get_sderror <- function(mod, vcov., mm, col_mean, isolate, isolate.value, intern
 			mf[x.var] <- isolate.value
 			mf <- model.frame(rTerms, mf, xlev = factor.levels, na.action=NULL)
 			mod.matrix <- model.matrix(formula.rhs, data = mf, contrasts.arg = .contr)
-			if (bias.adjust %in% c("none", "delta", "mcculloch", "diggle", "logitnorm")) {
+			if (bias.adjust %in% c("none", "taylor")) {
 				mm2 <- get_model_matrix(mod
 					, mod.matrix
 					, X.mod

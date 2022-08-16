@@ -21,62 +21,75 @@ varpred(
   internal = FALSE,
   avefun = mean,
   offset = NULL,
-  bias.adjust = c("none", "delta", "observed"),
+  bias.adjust = c("none", "taylor", "observed"),
   sigma = NULL,
   include.re = FALSE,
   modelname = NULL,
-  returnall = FALSE,
-  ...
+  returnall = FALSE
 )
 }
 \arguments{
 \item{mod}{fitted model object. See details for supported class of models.}
 
-\item{focal_predictors}{a character vector of one or more predictors. For models with interaction, the marginal predictions are obtained by specifying the corresponding predictors together. For example \code{~x1*x2} is specified as \code{c("x1", "x2")} to obtain the predictor effect for \code{x1} while holding \code{x2} and \code{x1:x2} at their typical values. If no interactions are present in the model, specifying more than one predictors compares predictions between the predictors.}
+\item{focal_predictors}{a character vector of one or more predictors. For a model with an interaction, the interacting variables are specified as a vector,  for example \code{~x1*x2} will be \code{c("x1", "x2")}. If no interactions are present in the model, specifying a vector of variables compares predictions between them.}
 
-\item{x.var}{a character specifying the predictor to define the x variable (horizontal axis on the plot). The default is \code{NULL}, of which the first predictor in \code{focal_predictors} is used.}
+\item{x.var}{a character specifying the predictor to define the x variable (horizontal axis on the plot). The default is \code{NULL}, of which the first predictor in \code{focal_predictors} is used. Ignored if there is a single \code{focal_predictors}.}
 
-\item{type}{a character specifying the desired prediction. \code{type = "response"} applies inverse transformation, if exists. \code{type = "link"} requests the results as a linear predictor.}
+\item{type}{a character specifying the desired prediction. \code{type = "response"} applies inverse transformation of the link functions, if exists. \code{type = "link"} requests the results as a linear predictor.}
 
-\item{isolate}{logical. If \code{TRUE}, the \code{CIs} are anchored around the mean value of \code{x.var}, i.e., centered model matrix. By default, it is the deviation of each of the variables in the model matrix from its mean but other values can be specified through \code{isolate.value}.}
+\item{isolate}{logical. If \code{TRUE} (default), computes effect estimates otherwise it computes prediction estimates. See details.}
 
-\item{isolate.value}{numeric (default \code{isolate.value = NULL}). If \code{isolate = TRUE}, otherwise ignored, is the deviation from the mean of \code{x.var}.}
+\item{isolate.value}{numeric (default \code{isolate.value = NULL}). If \code{isolate = TRUE}, otherwise ignored, is the value to use as the \emph{anchor}. The default value, computed internally, is the average of the linear predictor(s) corresponding to focal predictors.}
 
-\item{level}{desired confidence interval for computing marginal predictions. Default is \code{0.95}.}
+\item{level}{desired confidence interval for computing the confidence intervals. Default is \code{0.95}.}
 
-\item{steps}{number of points to evaluate numerical predictors in \code{focal_predictors}. The default is \code{100}. Unique levels of \code{focal_predictors} are used in the case categorical predictors.}
+\item{steps}{number of points to evaluate numerical predictors in \code{focal_predictors}. The default is \code{100}. Increase for smooth curves. Unique levels of \code{focal_predictors} are used in the case categorical predictors.}
 
-\item{at}{default \code{NULL}. Otherwise, is a named \code{list} specifying points to evaluate \code{focal_predictors}. The names in the list should match the names used in \code{focal_predictors}.}
+\item{at}{default \code{NULL}. Otherwise, is a named \code{list} specifying points to evaluate \code{focal_predictors}. The names in the list should match the names used in \code{focal_predictors}. If \code{NULL}, the levels are internally generated using quantile, see \code{\link[stats]{quantile}}.}
 
-\item{dfspec}{default \code{100}. Specified degrees of freedom for model which do not return \code{df}. This is used in computation of confidence intervals.}
+\item{dfspec}{default \code{100}. Specified degrees of freedom for a model which do not return \code{df}. This is used in computation of confidence intervals.}
 
-\item{vcov.}{a function or a matrix. If a function, it is used to compute the variance-covariance matrix of the model coefficients. The function should take model as it's first (or maybe only) argument. A matrix of variance-covariance matrix of the estimated coefficient can also be used. Otherwise \code{vcov(mod)} is used internally. Specifying \code{vcov.} is important when "anchored" CIs are required. However, with this approach, the predictors should be properly scaled, for example, scaled. {isolate=TRUE} centers at the mean of the model matrix without requiring the scaled input predictors. See examples.}
+\item{true.beta}{default \code{NULL}. If specified, used as model coefficient estimates and should be in the same order as the vector of coefficients from the model object. Useful when comparing model estimates to the "truth" (simulation values).}
 
-\item{internal}{logical. If \code{TRUE}, the entries of the non-focal predictor (see x.var) in the variance-covariance matrix are internally zeroed-out using \code{\link[vareffects]{zero_vcov}}. Default is \code{FALSE}.}
+\item{vcov.}{a function or a matrix. If a function, it is used to compute the variance-covariance matrix of the model coefficients. The function should take the model as it's first (or maybe only) argument. A matrix of variance-covariance matrix of the estimated coefficient can also be used. Otherwise \code{vcov(mod)} is used internally. Customized \code{vcov.} can be used to generate effect estimates if the columns corresponding to the non-focal predictors are all zero. However, with this approach, the predictors should be properly scaled. See examples.}
 
-\item{avefun}{the averaging scheme (function) to be used in conditioning non-focal predictors. Default is \code{mean}.}
+\item{internal}{logical. If \code{TRUE}, the entries of the non-focal predictor (see x.var) in the variance-covariance matrix are internally zeroed-out using \code{\link[varpred]{zero_vcov}}. Default is \code{FALSE}.}
 
-\item{offset}{a function or a value (FIXME:).}
+\item{avefun}{the averaging scheme (function) to be used in generating reference point for non-focal predictors. Default is \code{mean}.}
 
-\item{bias.adjust}{specifies the bias correction method. If "none" (default), no bias correction method is applied; if "delta", delta method is used; if "observed", all the values of non-focal predictors are used; otherwise, if "quantile", quantiles of non-focal numerical predictors are use. The options "quantile" and "observed" (both EXPERIMENTAL) are used for bias correction in GL(M)M models involving non-linear link functions.}
+\item{offset}{a function or a value.}
 
-\item{sigma}{standard deviation used in delta method (only if \code{bias.adjust="delta"}).}
+\item{bias.adjust}{specifies the bias correction method. If "none" (default), no bias correction method is applied; if "taylor", second-order Taylor approximation is used; if "observed", all the values of non-focal predictors are used. See details and examples.}
 
-\item{include.re}{logical. If \code{TRUE}, the random effects components of mixed models is included.}
+\item{sigma}{standard deviation used if \code{bias.adjust="taylor"}. If \code{NULL} (default), \code{\link[stats]{sigma}} or \code{VarCorr} is used.}
 
-\item{returnall}{logical. If \code{TRUE}, all other named computed quantities are also returned. Otherwise, only predictions are returned.}
+\item{include.re}{logical. Default is \code{FALSE}. If \code{TRUE}, the random effects components of mixed models is included.}
 
-\item{character}{string naming the predictions. Useful when comparing several predictions.}
+\item{modelname}{character string naming \code{varpred} objects. Useful when comparing several objects.}
+
+\item{returnall}{logical. If \code{TRUE}, all other named computed quantities are also returned.}
 }
 \description{
-Computes predictor effect for generalized linear (mixed) models together with the associated confidence intervals anchored on some values, mostly, model center. It also incorporates proaches for correcting bias in predictions for GL(M)Ms involving nonlinear link functions.
+Computes central estimates, prediction and effect estimates for a particular focal predictor.
 }
 \details{
-Predictor effects computes \code{E(Y|X)} by meaningfully holding the non-focal predictors constant (or averaged in some meaningful way) while varying the focal predictor, with the goal that the response (\code{E(Y|X)}) represents how the model responds to the changes in the focal predictor.
+The central estimates (often called effect or prediction) describe how the fitted model responds to the changes in the focal predictor. The other associated quantities are the prediction and effect estimates:
+\itemize{
+\item \strong{prediction estimates}: incorporate all the sources of uncertainty in the model. Important if our goal is to do prediction.
+\item \strong{effect estimates}: incorporate uncertainty due to focal predictor only. Focus on visualizing the \emph{effect} of the focal predictor.
+}
 
-The traditional way to compute variances for predictions is \eqn{\sigma^2 = \textrm{Diag}(\bX^\star \Sigma \bX^{\star\top})}, so that the confidence intervals are \eqn{\eta \pm q\sigma}, where \eqn{q} is an appropriate quantile of Normal or t distribution. This approach incorporates all the uncertainties -- including the uncertainty due to non-focal predictors.  But what if we are only interested in the uncertainty as a result of the focal predictor, so that the confidence intervals are \eqn{\eta \pm q \sigma_f} (what we call anchored CIs)? There are two ways to anchor CIs: \emph{variance-covariance} matrix based which requires properly scaled input predictors prior to model fitting; and \emph{centered model matrix} which is more general and does not require scaled input predictors prior to model fitting.
+The default approaches to compute these quantities involves averaging the non-focal linear predictors (columns of \code{\link[stats]{model.matrix}} corresponding to non-focal predictors) -- \emph{mean-based} approach. An alternative is the \emph{observed-value-based} approach which computes the estimates over the entire population of the non-focal predictors and then averages them over the levels of the focal predictors. The later approach is more appropriate for a model involving non-linear link function with non-focal predictors and/or random effects. See \code{vignette("vapred_intro", package="varpred")}) for more details.
 
-Currently, the package supports \code{lm, glm, lme4} and \code{glmmTMB} models.
+The current version supports:
+\itemize{
+\item lm and glm
+\item lme4
+\item glmmTMB
+\item rstanarm
+}
+
+objects.
 }
 \examples{
 
@@ -133,5 +146,5 @@ plot(pred4c)
 
 }
 \seealso{
-\code{\link[vareffects]{plot.vareffects}}
+\code{\link[varpred]{plot.varpred}}
 }
