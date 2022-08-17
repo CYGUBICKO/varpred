@@ -59,7 +59,10 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9">
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header"><h1 id="varpred">varpred<a class="anchor" aria-label="anchor" href="#varpred"></a>
+</h1></div>
+<!-- badges: start -->
 <p>This package implements two approaches for constructing outcome plots (prediction and effect plots). These include:</p>
 <ul>
 <li>
@@ -76,9 +79,8 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the development version of varpred from <a href="https://github.com/cygubicko/varpred" class="external-link">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"CYGUBICKO/varpred"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># install.packages("remotes")</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"CYGUBICKO/varpred"</span>)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -90,38 +92,35 @@
 <li>
 <code>isolate=FALSE</code> to generate prediction plot</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">varpred</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-
-<span class="co">## Set theme for plots</span>
-<span class="fu"><a href="reference/varpredtheme.html">varpredtheme</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="co">## Fit the model</span>
-<span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">hp</span>, <span class="va">mtcars</span><span class="op">)</span>
-
-<span class="co">## Effect</span>
-<span class="va">ef</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"wt"</span>, isolate<span class="op">=</span><span class="cn">TRUE</span>, modelname<span class="op">=</span><span class="st">"effect"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ef</span><span class="op">)</span></code></pre></div>
+<!-- --><div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(varpred)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">## Set theme for plots</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="kw">varpredtheme</span>()</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">## Fit the model</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>mod &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>hp, mtcars)</span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">## Effect</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>ef &lt;-<span class="st"> </span><span class="kw">varpred</span>(mod, <span class="st">"wt"</span>, <span class="dt">isolate=</span><span class="ot">TRUE</span>, <span class="dt">modelname=</span><span class="st">"effect"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="kw">plot</span>(ef)</span></code></pre></div>
 <p><img src="reference/figures/simple_example-1.png" width="100%"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Prediction</span>
-<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"wt"</span>, isolate<span class="op">=</span><span class="cn">FALSE</span>, modelname<span class="op">=</span><span class="st">"prediction"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">## Prediction</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>pred &lt;-<span class="st"> </span><span class="kw">varpred</span>(mod, <span class="st">"wt"</span>, <span class="dt">isolate=</span><span class="ot">FALSE</span>, <span class="dt">modelname=</span><span class="st">"prediction"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">plot</span>(pred)</span></code></pre></div>
 <p><img src="reference/figures/simple_example-2.png" width="100%"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Compare effect and prediction</span>
-<span class="va">all_v</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/combinevarpred.html">combinevarpred</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ef</span>, <span class="va">pred</span><span class="op">)</span><span class="op">)</span>
-<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">all_v</span><span class="op">)</span>
-
-<span class="co">## Add observed data</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p1</span>
-    <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">wt</span>, y<span class="op">=</span><span class="va">mpg</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span>
-    <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"Method"</span>, linetype<span class="op">=</span><span class="st">"Method"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">## Compare effect and prediction</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>all_v &lt;-<span class="st"> </span><span class="kw">combinevarpred</span>(<span class="kw">list</span>(ef, pred))</span>
+<span id="cb4-3"><a href="#cb4-3"></a>p1 &lt;-<span class="st"> </span><span class="kw">plot</span>(all_v)</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">## Add observed data</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="kw">print</span>(p1</span>
+<span id="cb4-7"><a href="#cb4-7"></a>    <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>wt, <span class="dt">y=</span>mpg), <span class="dt">col=</span><span class="st">"grey"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8"></a>    <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">colour=</span><span class="st">"Method"</span>, <span class="dt">linetype=</span><span class="st">"Method"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9"></a>)</span></code></pre></div>
 <p><img src="reference/figures/simple_example-3.png" width="100%"></p>
 </div>
-
+</div>
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">

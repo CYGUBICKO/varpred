@@ -92,57 +92,44 @@ The current version supports:
 objects.
 }
 \examples{
-
 # Set theme for ggplot. Comment out if not needed
-varefftheme()
-set.seed(101)
+varpredtheme()
+set.seed(911)
+# Simulate binary outcome data with two predictors
+steps <- 500
 N <- 100
-x1_min <- 1
-x1_max <- 9
-b0 <- 0.3
-b1 <- 0.1
-b2 <- -0.6
-b3 <- 0.01
-x2_levels <- factor(c("A", "B", "D"))
-df <- expand.grid(x1u = runif(n=N, min=x1_min, max=x1_max)
-	, x2u = x2_levels
-)
-X <- model.matrix(~x1u + x2u, df)
-betas <- c(b0, b1, b2, b3)
-df$y <- rnorm(nrow(df), mean= X \%*\% betas, sd=1)
-df2 <- df
-df <- transform(df
-	, x1c = drop(scale(x1u, scale=FALSE))
-)
-head(df)
+b0 <- 2
+b_age <- -1.5
+b_income <- 1.8
+min_age <- 18
+age <- min_age + rnorm(N, 0, 1)
+min_income <- 15
+income <- min_income + rnorm(N, 0, 1)
+eta <- b0 + age*b_age + income*b_income
+status <- rbinom(N, 1, plogis(eta))
+df <- data.frame(status, age, income)
 
-# Unscaled model
-m1u <- lm(y ~ x1u + x2u, df)
-# Predictor rffects of x1u
-pred1u <- varpred(m1u, "x1u")
-plot(pred1u)
+# Fit model
+mod <- glm(status ~ age + income, df, family=binomial())
 
-# Scaled model (x1 centered = x1 - mean(x1))
-m1c <- lm(y ~ x1c + x2u, df)
-# All uncertainities included
-pred1c <- varpred(m1c, "x1c")
-plot(pred1c)
+# Effect plots
+## Mean-based
+ef_mean <- varpred(mod, "age", steps=steps, bias.adjust="none", modelname="mean-based")
+## Observed-value-based
+ef_observed <- varpred(mod, "age", steps=steps, bias.adjust="observed", modelname="observed-value")
+## Combine all the effect estimates
+ef <- combinevarpred(list(ef_mean, ef_observed))
+plot(ef)
 
-# Centered predictor effects
-# Results similar to m1c
-# Using zero_vcov by specifying vcov.
-vv <- zero_vcov(m1c, "x1c")
-pred2c <- varpred(m1c, "x1c", vcov. = vv)
-plot(pred2c)
-
-# Using mean centering (isolate)
-pred3c <- varpred(m1u, "x1u", isolate = TRUE)
-plot(pred3c)
-all.equal(pred2c$pred[,-1], pred3c$pred[,-1], check.attributes = FALSE)
-
-# Compare across groups
-pred4c <- varpred(m1c, c("x1c", "x2u"), x.var = "x1c", isolate = TRUE)
-plot(pred4c)
+# Prediction plots
+## Mean-based
+pred_mean <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="none", modelname="mean-based")
+## Observed-value-based
+pred_observed <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="observed", modelname="observed-value")
+## Combine all the prediction estimates
+### With plotit=TRUE no need to plot
+pred <- combinevarpred(list(pred_mean, pred_observed), plotit=TRUE)
+print(pred)
 
 }
 \seealso{

@@ -61,8 +61,80 @@
 <span class="op">)</span></code></pre></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <dl><dt>vlist</dt>
+<dd><p>a list of <code>varpred</code> objects.</p></dd>
 
-  </main></div>
+
+<dt>lnames</dt>
+<dd><p>a character vector specifying the name(s) of the vlist objects. Useful when faceted comparison is needed. See examples.</p></dd>
+
+
+<dt>plotit</dt>
+<dd><p>logical. If <code>TRUE</code> a plot is returned, otherwise a <code>varpred</code> object.</p></dd>
+
+
+<dt>addmarginals</dt>
+<dd><p>logical. If <code>TRUE</code> the mean of the estimates is added to the plot.</p></dd>
+
+
+<dt>margindex</dt>
+<dd><p>an integer vector indexing the <code>vlist</code>. Useful if particular <code>vlist</code> needs to be averaged together in the <code>addmarginals</code>.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>additional arguments passed to <code><a href="plot.varpred.html">plot.varpred</a></code>.</p></dd>
+
+</dl></div>
+
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Set theme for ggplot. Comment out if not needed</span></span>
+<span class="r-in"><span class="fu"><a href="varpredtheme.html">varpredtheme</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">911</span><span class="op">)</span></span>
+<span class="r-in"><span class="co"># Simulate binary outcome data with two predictors</span></span>
+<span class="r-in"><span class="va">steps</span> <span class="op">&lt;-</span> <span class="fl">500</span></span>
+<span class="r-in"><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span class="r-in"><span class="va">b0</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span class="r-in"><span class="va">b_age</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1.5</span></span>
+<span class="r-in"><span class="va">b_income</span> <span class="op">&lt;-</span> <span class="fl">1.8</span></span>
+<span class="r-in"><span class="va">min_age</span> <span class="op">&lt;-</span> <span class="fl">18</span></span>
+<span class="r-in"><span class="va">age</span> <span class="op">&lt;-</span> <span class="va">min_age</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">N</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">min_income</span> <span class="op">&lt;-</span> <span class="fl">15</span></span>
+<span class="r-in"><span class="va">income</span> <span class="op">&lt;-</span> <span class="va">min_income</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">N</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">eta</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">age</span><span class="op">*</span><span class="va">b_age</span> <span class="op">+</span> <span class="va">income</span><span class="op">*</span><span class="va">b_income</span></span>
+<span class="r-in"><span class="va">status</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">N</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">plogis</a></span><span class="op">(</span><span class="va">eta</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">status</span>, <span class="va">age</span>, <span class="va">income</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Fit model</span></span>
+<span class="r-in"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">status</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">income</span>, <span class="va">df</span>, family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Effect plots</span></span>
+<span class="r-in"><span class="co">## Mean-based</span></span>
+<span class="r-in"><span class="va">ef_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"age"</span>, steps<span class="op">=</span><span class="va">steps</span>, bias.adjust<span class="op">=</span><span class="st">"none"</span>, modelname<span class="op">=</span><span class="st">"mean-based"</span><span class="op">)</span></span>
+<span class="r-in"><span class="co">## Observed-value-based</span></span>
+<span class="r-in"><span class="va">ef_observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"age"</span>, steps<span class="op">=</span><span class="va">steps</span>, bias.adjust<span class="op">=</span><span class="st">"observed"</span>, modelname<span class="op">=</span><span class="st">"observed-value"</span><span class="op">)</span></span>
+<span class="r-in"><span class="co">## Combine all the effect estimates</span></span>
+<span class="r-in"><span class="va">ef</span> <span class="op">&lt;-</span> <span class="fu">combinevarpred</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ef_mean</span>, <span class="va">ef_observed</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ef</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="combinevarpred-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Prediction plots</span></span>
+<span class="r-in"><span class="co">## Mean-based</span></span>
+<span class="r-in"><span class="va">pred_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"age"</span>, isolate<span class="op">=</span><span class="cn">FALSE</span>, steps<span class="op">=</span><span class="va">steps</span>, bias.adjust<span class="op">=</span><span class="st">"none"</span>, modelname<span class="op">=</span><span class="st">"mean-based"</span><span class="op">)</span></span>
+<span class="r-in"><span class="co">## Observed-value-based</span></span>
+<span class="r-in"><span class="va">pred_observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"age"</span>, isolate<span class="op">=</span><span class="cn">FALSE</span>, steps<span class="op">=</span><span class="va">steps</span>, bias.adjust<span class="op">=</span><span class="st">"observed"</span>, modelname<span class="op">=</span><span class="st">"observed-value"</span><span class="op">)</span></span>
+<span class="r-in"><span class="co">## Combine all the prediction estimates</span></span>
+<span class="r-in"><span class="co">### With plotit=TRUE no need to plot</span></span>
+<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">combinevarpred</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pred_mean</span>, <span class="va">pred_observed</span><span class="op">)</span>, plotit<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="combinevarpred-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"></span>
+</code></pre></div>
+    </div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

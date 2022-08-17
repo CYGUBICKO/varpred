@@ -15,40 +15,40 @@ pop.bias.adjust <- function(x.focal, x.excluded, betahat, formula.rhs
 	}
 
 
-# 	if (isolate) {
-## UPDATE: 2022 Jun 18 (Sat) 
-### Applies to both cases
-if (!is.null(x.excluded)) {
-	factor.levels_update <- factor.levels
-	if (!is.null(x.joint)) {
-		x.focal.names <- c(colnames(x.focal), x.joint)
-		x.excluded.names <- colnames(x.excluded)[!colnames(x.excluded) %in% x.joint]
-	} else {
-		x.focal.names <- colnames(x.focal)
-		x.excluded.names <- colnames(x.excluded)
-	}
-	factor.levels_update[!names(factor.levels_update) %in% x.focal.names] <- NULL
-	drop_index <- grep(paste(x.excluded.names, collapse = "|"), attr(rTerms, "term.labels"))
-	rTerms_update <- drop.terms(rTerms, drop_index)
-	formula.rhs_update <- drop.terms(terms(formula.rhs), drop_index)
-	contr_update <- contr
-	contr_update[!names(contr_update) %in% x.focal.names] <- NULL
-	focal_mf <- model.frame(formula(rTerms_update), cbind.data.frame(x.focal, x.excluded[, x.joint, drop=FALSE]), xlev=factor.levels_update, na.action=NULL)
-} else {
-	rTerms_update <- rTerms
-	factor.levels_update <- factor.levels
-	formula.rhs_update <- formula.rhs
-	contr_update <- contr
-	focal_mf <- model.frame(formula(rTerms_update), x.focal, xlev=factor.levels_update, na.action=NULL)
-}
-focal_mm <- model.matrix(formula.rhs_update, data = focal_mf, contrasts.arg = contr_update)
-focal_terms_update <- colnames(focal_mm) #attr(terms(formula.rhs_update), "term.labels")
-# 	} else {
-# 		focal_mf <- model.frame(mod)
-# 		focal_mm <- mm
-# 		focal_terms_update <- NULL
-# 		contr_update <- contr
-# 	}
+ 	if (isolate) {
+		## UPDATE: 2022 Jun 18 (Sat) 
+		### Applies to both cases
+		if (!is.null(x.excluded)) {
+			factor.levels_update <- factor.levels
+			if (!is.null(x.joint)) {
+				x.focal.names <- c(colnames(x.focal), x.joint)
+				x.excluded.names <- colnames(x.excluded)[!colnames(x.excluded) %in% x.joint]
+			} else {
+				x.focal.names <- colnames(x.focal)
+				x.excluded.names <- colnames(x.excluded)
+			}
+			factor.levels_update[!names(factor.levels_update) %in% x.focal.names] <- NULL
+			drop_index <- grep(paste(x.excluded.names, collapse = "|"), attr(rTerms, "term.labels"))
+			rTerms_update <- drop.terms(rTerms, drop_index)
+			formula.rhs_update <- drop.terms(terms(formula.rhs), drop_index)
+			contr_update <- contr
+			contr_update[!names(contr_update) %in% x.focal.names] <- NULL
+			focal_mf <- model.frame(formula(rTerms_update), cbind.data.frame(x.focal, x.excluded[, x.joint, drop=FALSE]), xlev=factor.levels_update, na.action=NULL)
+		} else {
+			rTerms_update <- rTerms
+			factor.levels_update <- factor.levels
+			formula.rhs_update <- formula.rhs
+			contr_update <- contr
+			focal_mf <- model.frame(formula(rTerms_update), x.focal, xlev=factor.levels_update, na.action=NULL)
+		}
+		focal_mm <- model.matrix(formula.rhs_update, data = focal_mf, contrasts.arg = contr_update)
+		focal_terms_update <- colnames(focal_mm) #attr(terms(formula.rhs_update), "term.labels")
+ 	} else {
+ 		focal_mf <- model.frame(mod)
+ 		focal_mm <- mm
+ 		focal_terms_update <- NULL
+ 		contr_update <- contr
+ 	}
 	col_mean <- colMeans(focal_mm)
 	
 	pse_var <- mult*get_sderror(mod=mod
@@ -245,7 +245,7 @@ get_sderror <- function(mod, vcov., mm, col_mean, isolate, isolate.value, intern
 #			mm_mean <- t(replicate(NROW(mm), col_mean))
 		}
 		mm <- mm - mm_mean
-	}
+	} 
 #	pse_var <- sqrt(diag(mm %*% tcrossprod(data.matrix(vc), mm)))
 	pse_var <- sqrt(rowSums(mm * t(tcrossprod(data.matrix(vc), mm))))
 	return(pse_var)

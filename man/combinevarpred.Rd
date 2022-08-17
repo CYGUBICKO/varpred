@@ -13,6 +13,60 @@ combinevarpred(
   ...
 )
 }
+\arguments{
+\item{vlist}{a list of \code{varpred} objects.}
+
+\item{lnames}{a character vector specifying the name(s) of the vlist objects. Useful when faceted comparison is needed. See examples.}
+
+\item{plotit}{logical. If \code{TRUE} a plot is returned, otherwise a \code{varpred} object.}
+
+\item{addmarginals}{logical. If \code{TRUE} the mean of the estimates is added to the plot.}
+
+\item{margindex}{an integer vector indexing the \code{vlist}. Useful if particular \code{vlist} needs to be averaged together in the \code{addmarginals}.}
+
+\item{...}{additional arguments passed to \code{\link[varpred]{plot.varpred}}.}
+}
 \description{
 Combines and plots comparison plots for more than two named varpred objects.
+}
+\examples{
+# Set theme for ggplot. Comment out if not needed
+varpredtheme()
+set.seed(911)
+# Simulate binary outcome data with two predictors
+steps <- 500
+N <- 100
+b0 <- 2
+b_age <- -1.5
+b_income <- 1.8
+min_age <- 18
+age <- min_age + rnorm(N, 0, 1)
+min_income <- 15
+income <- min_income + rnorm(N, 0, 1)
+eta <- b0 + age*b_age + income*b_income
+status <- rbinom(N, 1, plogis(eta))
+df <- data.frame(status, age, income)
+
+# Fit model
+mod <- glm(status ~ age + income, df, family=binomial())
+
+# Effect plots
+## Mean-based
+ef_mean <- varpred(mod, "age", steps=steps, bias.adjust="none", modelname="mean-based")
+## Observed-value-based
+ef_observed <- varpred(mod, "age", steps=steps, bias.adjust="observed", modelname="observed-value")
+## Combine all the effect estimates
+ef <- combinevarpred(list(ef_mean, ef_observed))
+plot(ef)
+
+# Prediction plots
+## Mean-based
+pred_mean <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="none", modelname="mean-based")
+## Observed-value-based
+pred_observed <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="observed", modelname="observed-value")
+## Combine all the prediction estimates
+### With plotit=TRUE no need to plot
+pred <- combinevarpred(list(pred_mean, pred_observed), plotit=TRUE)
+print(pred)
+
 }
