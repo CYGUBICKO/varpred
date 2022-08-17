@@ -1,18 +1,3 @@
----
-output: 
-  md_document:
-    toc: false
-    fig_width: 10.08
-    fig_height: 6
-tags: [r, prediction, effect]
-vignette: >
-  %\VignetteIndexEntry{README}
-  \usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
----
-
 ```{=html}
 <!-- badges: start -->
 ```
