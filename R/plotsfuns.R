@@ -1,7 +1,7 @@
 #' Plot  predictions 
 #' 
 #' Plots estimated conditional or marginal predictions. 
-#' @param x \code{\link[vareffects]{varpred}} object
+#' @param x \code{\link[varpred]{varpred}} object
 #' @param ... for future implementations
 #' @param xlabs x-axis label. If \code{NULL}, default, \code{x.var} is used.
 #' @param ylabs y-axis label. If \code{NULL}, default, the response label is used.
@@ -11,7 +11,7 @@
 #' @return a \code{\link[ggplot2]{ggplot}} object.
 #'
 #' @seealso
-#'\code{\link[vareffects]{varpred}}
+#'\code{\link[varpred]{varpred}}
 #'
 #' @examples
 #' set.seed(4567)
@@ -118,13 +118,13 @@ plot.varpred <- function(x, ..., xlabs = NULL, ylabs = NULL, xtrans_fun=NULL, po
 	return(p2)
 }
 
-#' Customized theme for vareffects plots
+#' Customized theme for varpred plots
 #'
-#' Sets a theme for vareffects and other ggplot objects
+#' Sets a theme for varpred and other ggplot objects
 #'
 #' @examples
 #' library(ggplot2)
-#' varefftheme()
+#' varpredtheme()
 #' set.seed(4567)
 #' x <- rnorm(100, 3, 5)
 #' y <- 0.4 + 0.7*x + rnorm(100)
@@ -137,7 +137,7 @@ plot.varpred <- function(x, ..., xlabs = NULL, ylabs = NULL, xtrans_fun=NULL, po
 #' @import ggplot2
 #' @export
 
-varefftheme <- function(type=c("minimal", "complete")){
+varpredtheme <- function(type=c("minimal", "complete")){
 	type=match.arg(type)
 	if (type=="complete") {
 		theme_set(theme_bw() +

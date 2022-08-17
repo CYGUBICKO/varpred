@@ -17,7 +17,7 @@
 )
 }
 \arguments{
-\item{x}{\code{\link[vareffects]{varpred}} object}
+\item{x}{\code{\link[varpred]{varpred}} object}
 
 \item{...}{for future implementations}
 
@@ -47,5 +47,5 @@ plot(pred1)
 
 }
 \seealso{
-\code{\link[vareffects]{varpred}}
+\code{\link[varpred]{varpred}}
 }

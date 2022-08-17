@@ -6,6 +6,7 @@ current: target
 vim_session:
 	bash -cl "vmt"
 
+
 ######################################################################
 
 Sources += $(wildcard *.md .*.yml)
@@ -13,9 +14,18 @@ Sources += $(wildcard vignettes/*.md)
 Sources += $(wildcard vignettes/*.Rmd)
 Sources += $(wildcard *.R R/*.R)
 Sources += $(wildcard man/*.Rd) NAMESPACE DESCRIPTION
+Sources += $(wildcard man/figures/*)
 Sources += $(wildcard docs/*)
 
+######################################################################
+
+
+autopipeR = defined
+
 Sources += README.md 
+Sources += README.Rmd 
+README.md: README.Rmd
+	$(knitmd)
 
 ######################################################################
 
@@ -30,7 +40,8 @@ pkgsExport.Rout: R/pkgsExport.R
 ######################################################################
 
 install:
-	make update-doc && make build-package && make install-tarball && make pkg-site
+	make update-doc && make build-package && make install-tarball && make README.md
+	make pkg-site
 
 pkg-site:
 	echo "pkgdown::build_site()" | R --slave
@@ -71,9 +82,9 @@ makestuff/%.stamp:
 
 -include makestuff/os.mk
 
+-include makestuff/chains.mk
 -include makestuff/texi.mk
 -include makestuff/pipeR.mk
--include makestuff/chains.mk
 
 -include makestuff/git.mk
 -include makestuff/visual.mk
