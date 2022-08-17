@@ -19,7 +19,9 @@ Sources += $(wildcard docs/*)
 
 ######################################################################
 
+## We don't need to preserve yml as defined in $(knitmd)
 makemd = echo "library(rmarkdown); render(\"$^\", \"md_document\")" | R --slave
+
 autopipeR = defined
 
 Sources += README.md 
