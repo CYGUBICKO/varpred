@@ -17,6 +17,12 @@ Sources += $(wildcard man/*.Rd) NAMESPACE DESCRIPTION
 Sources += $(wildcard man/figures/*)
 Sources += $(wildcard docs/*)
 
+Ignore += README.html
+Ignore += *.md.args
+Ignore += vignettes/.gitignore
+Ignore += .gitignore
+Ignore += varpred_*.*.tar.gz
+
 ######################################################################
 
 ## We don't need to preserve yml as defined in $(knitmd)
