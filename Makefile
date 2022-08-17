@@ -19,13 +19,13 @@ Sources += $(wildcard docs/*)
 
 ######################################################################
 
-
+makemd = echo "library(rmarkdown); render(\"$^\", \"md_document\")" | R --slave
 autopipeR = defined
 
 Sources += README.md 
 Sources += README.Rmd 
 README.md: README.Rmd
-	$(knitmd)
+	$(makemd)
 
 ######################################################################
 

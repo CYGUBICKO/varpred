@@ -1,13 +1,12 @@
-```{=html}
 <!-- badges: start -->
-```
+
 [![Travis build
 status](https://travis-ci.com/CYGUBICKO/varpred.svg?branch=main)](https://travis-ci.com/CYGUBICKO/varpred)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/varpred)](https://CRAN.R-project.org/package=varpred)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-`<!-- badges: end -->`{=html}
+<!-- badges: end -->
 
 This package implements two approaches for constructing outcome plots
 (prediction and effect plots). These include:
@@ -30,10 +29,8 @@ Installation
 You can install the development version of varpred from
 [GitHub](https://github.com/cygubicko/varpred) with:
 
-``` {.r}
-# install.packages("remotes")
-remotes::install_github("CYGUBICKO/varpred")
-```
+    # install.packages("remotes")
+    remotes::install_github("CYGUBICKO/varpred")
 
 Example
 -------
@@ -43,41 +40,39 @@ We use `mtcars` data to show outcome plots:
 -   `isolate=TRUE` to generate effect plot
 -   `isolate=FALSE` to generate prediction plot
 
-``` {.r}
-library(varpred)
-library(ggplot2)
+<!-- -->
 
-## Set theme for plots
-varpredtheme()
+    library(varpred)
+    library(ggplot2)
 
-## Fit the model
-mod <- lm(mpg ~ wt + hp, mtcars)
+    ## Set theme for plots
+    varpredtheme()
 
-## Effect
-ef <- varpred(mod, "wt", isolate=TRUE, modelname="effect")
-plot(ef)
-```
+    ## Fit the model
+    mod <- lm(mpg ~ wt + hp, mtcars)
 
-`<img src="man/figures/simple_example-1.png" width="100%" />`{=html}
+    ## Effect
+    ef <- varpred(mod, "wt", isolate=TRUE, modelname="effect")
+    plot(ef)
 
-``` {.r}
-## Prediction
-pred <- varpred(mod, "wt", isolate=FALSE, modelname="prediction")
-plot(pred)
-```
+<img src="man/figures/simple_example-1.png" width="100%" />
 
-`<img src="man/figures/simple_example-2.png" width="100%" />`{=html}
 
-``` {.r}
-## Compare effect and prediction
-all_v <- combinevarpred(list(ef, pred))
-p1 <- plot(all_v)
+    ## Prediction
+    pred <- varpred(mod, "wt", isolate=FALSE, modelname="prediction")
+    plot(pred)
 
-## Add observed data
-print(p1
-    + geom_point(data=mtcars, aes(x=wt, y=mpg), col="grey")
-    + labs(colour="Method", linetype="Method")
-)
-```
+<img src="man/figures/simple_example-2.png" width="100%" />
 
-`<img src="man/figures/simple_example-3.png" width="100%" />`{=html}
+
+    ## Compare effect and prediction
+    all_v <- combinevarpred(list(ef, pred))
+    p1 <- plot(all_v)
+
+    ## Add observed data
+    print(p1
+        + geom_point(data=mtcars, aes(x=wt, y=mpg), col="grey")
+        + labs(colour="Method", linetype="Method")
+    )
+
+<img src="man/figures/simple_example-3.png" width="100%" />
