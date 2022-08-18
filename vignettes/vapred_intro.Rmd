@@ -1,8 +1,9 @@
 ---
-title: "Outcome plots: uncertainty estimation and bias correction for predictions and effects in simple and generalized linear (mixed) models"
+title: "Outcome plots"
 author: Bicko Cygu, Ben Bolker, Jonathan Dushoff
 output:
-  pdf_document: default
+  rmarkdown::html_vignette:
+    code_folding: hide
 vignette: >
   %\VignetteIndexEntry{Outcome plots}
   %\VignetteEngine{knitr::rmarkdown}
@@ -15,9 +16,6 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-
-\def\code#1{\texttt{#1}}
-\let\proglang=\textsf
 
 # Motivation
 
@@ -33,8 +31,148 @@ An outcome plot (often called effect or prediction plot), plots _focal_ predicto
 
 ## Mean-based approach
 
-In a model with non-focal predictors such as multivariate models, reference points (values chosen for non-focal predictors) can be chosen as the average of the non-focal _linear predictor variables_ (columns of the model matrix corresponding to non-focal predictors) -- we call this approach _mean-based_ reference point and is currently not implemented in commonly used \proglang{R} software \textbf{packages}.
+In a model with non-focal predictors such as multivariate models, reference points (values chosen for non-focal predictors) can be chosen as the average of the non-focal _linear predictor variables_ (columns of the model matrix corresponding to non-focal predictors) -- we call this approach _mean-based_ reference point and is currently not implemented in commonly used **R** software \textbf{packages}.
 
-```{r setup}
-library(varpred)
+To illustrate this, we use `mtcars` dataset to fit two models: 1) one without interaction, and 2) one with interaction between predictors.
+
+```{r simple-mean-based-mod}
+df <- datasets::mtcars
+
+## No interaction model
+mod1 <- lm(mpg ~ wt + disp + hp, df)
+
+## Model with interaction
+mod2 <- lm(mpg ~ wt + disp*hp, df)
 ```
+
+If we consider `wt` as the focal predictor, then the remaining (`disp` and `hp`) are non-focal predictors. We use `varpred`, `emmeans` and `Effects` for comparison.
+
+**vapred package**:
+
+- `bias.adjust="none"`: to generate mean-based
+- All the three packages have different ways of generating values of focal predictor. For comparison, we use quantile and generate same focal values. Unless you want to compare with same values, this is not necessary.
+
+```{r simple-mean-based-varpred}
+library(varpred)
+varpredtheme()
+
+## generate values for focal predictor
+steps <- 500
+quant <- seq(0, 1, length.out=steps)
+wt_values <- quantile(df$wt, quant, names=FALSE) |> unique()
+
+## No interaction
+vpred1 <- varpred(mod=mod1
+	, focal_predictors="wt"
+	, at=list(wt=wt_values)
+	, bias.adjust="none"
+	, modelname="varpred: no interaction"
+)
+
+## With interaction
+vpred2 <- varpred(mod=mod2
+	, focal_predictors="wt"
+	, at=list(wt=wt_values)
+	, bias.adjust="none"
+	, modelname="varpred: with interaction"
+)
+names_use <- vpred2 |> head() |> colnames()
+```
+
+**emmeans package**:
+
+```{r simple-mean-based-emmeans}
+library(emmeans)
+em1 <- emmeans(mod1
+	, specs=~wt
+	, at=list(wt=wt_values)
+)
+em1 <- em1 |> data.frame()
+em1$model <- "emmeans: no interaction"
+em1$df <- NULL
+colnames(em1) <- names_use
+
+em2 <- emmeans(mod2
+	, specs=~wt
+	, at=list(wt=wt_values)
+)
+em2 <- em2 |> data.frame()
+em2$model <- "emmeans: with interaction"
+em2$df <- NULL
+colnames(em2) <- names_use
+```
+
+**Effects package**:
+
+```{r simple-mean-based-Effects}
+library(effects)
+ef1 <- Effect("wt"
+	, mod1
+	, xlevels=list(wt=wt_values)
+)
+ef1 <- ef1 |> data.frame()
+ef1$model <- "effects: no interaction"
+colnames(ef1) <- names_use
+
+ef2 <- Effect("wt"
+	, mod2
+	, xlevels=list(wt=wt_values)
+)
+ef2 <- ef2 |> data.frame()
+ef2$model <- "effects: with interaction"
+colnames(ef2) <- names_use
+```
+
+We can use `varpred::combinevarpred` to combine and compared the estimates:
+
+- `attrvpred`: converts `emmeans` and `effects` objects to `varpred` 
+- `getmeans`: calculates marginal means of the estimates to compare with the data mean (mean of observed data)
+
+The plot below compares the central estimates (trend lines), together with their mean (horizontal lines) with the data mean (mean of `mpg`) and the observed data (grey points).
+
+```{r simple-mean-based-combine}
+library(ggplot2)
+## Combine emmeans, effects and varpred objects
+## and convert all to varpred objects for ploting
+attrvpred <- function(obj) {
+	if (!inherits(obj, "varpred")) {
+		temp_obj <- list()
+		obj$method <- gsub(".*\\: ", "", obj$model)
+		obj$model <- gsub("\\:.*", "", obj$model)
+		temp_obj$preds <- obj
+		class(temp_obj) <- "varpred"
+		return(temp_obj)
+	} else {
+		obj$preds$method <- gsub(".*\\: ", "", obj$preds$model)
+		obj$preds$model <- gsub("\\:.*", "", obj$preds$model)
+		return(obj)
+	}
+}
+all_preds <- lapply(list(vpred1, vpred2, em1, em2, ef1, ef2), attrvpred)
+
+## Compute marginal means: mean of the estimates
+all_means <- lapply(all_preds, function(x){
+	model <- x$preds$model[[1]]
+	method <- x$preds$method[[1]]
+	m <- getmeans(x, focal="wt", modelname=model)
+	m$method <- method
+	return(m)
+})
+all_means <- do.call("rbind", all_means)
+
+## Data mean
+df_mean <- data.frame(mpg=mean(df$mpg)
+	, model="data mean"
+)
+
+## Plot all the estimates
+p1 <- (combinevarpred(all_preds, plotit=TRUE, ci=FALSE)
+	+ geom_point(data=df, aes(x=wt, y=mpg), col="grey")
+	+ geom_hline(data=df_mean, aes(yintercept=mpg, color=model, linetype=model)) 
+	+ geom_hline(data=all_means, aes(yintercept=fit, colour=model, linetype=model))
+	+ facet_wrap(~method)
+)
+print(p1)
+```
+
+Does this work?

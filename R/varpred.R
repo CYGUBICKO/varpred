@@ -497,7 +497,7 @@ combinevarpred <- function(vlist, lnames=NULL, plotit=FALSE, addmarginals=FALSE,
 		if (!is.null(lnames)) {
 			pp$.varpred <- lnames[[v]]
 		}
-		if (is.null(attr(pp, "modelname"))) {
+		if (is.null(attr(pp, "modelname")) && is.null(pp$model)) {
 			pp$model <- paste0("varpred", v)
 		}
 		return(pp)

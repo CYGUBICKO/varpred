@@ -502,9 +502,9 @@ clean_model <- function(focal.predictors, mod, xlevels
 		} else {
 		  if(length(xlevels[[name]]) == 1L) { 
 			# seq(min(X[, name]), max(X[,name]), length=xlevels[[name]])
-			  .x <- xlevels[[name]]
+			  .x <- unique(xlevels[[name]])
 			} else {
-			  .x <- xlevels[[name]]
+			  .x <- unique(xlevels[[name]])
 			}
 		}
 	 } else {
