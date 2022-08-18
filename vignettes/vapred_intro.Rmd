@@ -1,8 +1,10 @@
 ---
-title: "Introduction"
-output: rmarkdown::html_vignette
+title: "Outcome plots: uncertainty estimation and bias correction for predictions and effects in simple and generalized linear (mixed) models"
+author: Bicko Cygu, Ben Bolker, Jonathan Dushoff
+output:
+  pdf_document: default
 vignette: >
-  %\VignetteIndexEntry{Introduction}
+  %\VignetteIndexEntry{Outcome plots}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,6 +15,25 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+\def\code#1{\texttt{#1}}
+\let\proglang=\textsf
+
+# Motivation
+
+The development of this package is motivated by the water, sanitation, and hygiene (WaSH) data in which we were interested in investigating the contribution of demographic and socio-economic factors to improved WaSH indicators among the slum dwellers in Nairobi, Kenya. We noticed that the predictions we generated using the existing packages consistently over- or under- estimated the observed proportions; and did not align well with the observed data points. In other words, what we call _bias_. There are several (challenges) reasons for this, including:
+
+- the choice of the _reference point_
+- uncertainty estimation -- the choice of _anchor_ for computing confidence intervals
+- biases induced by non-linear averaging due to non-linear transformation in generalized linear models
+
+# Introduction
+
+An outcome plot (often called effect or prediction plot), plots _focal_ predictor on the x-axis and _central estimate_ (predicted values) on the y-axis. The resulting plot provide a useful way to summarize the results from a regression model; and depend on how we deal with the above challenges.
+
+## Mean-based approach
+
+In a model with non-focal predictors such as multivariate models, reference points (values chosen for non-focal predictors) can be chosen as the average of the non-focal _linear predictor variables_ (columns of the model matrix corresponding to non-focal predictors) -- we call this approach _mean-based_ reference point and is currently not implemented in commonly used \proglang{R} software \textbf{packages}.
 
 ```{r setup}
 library(varpred)

@@ -27,6 +27,7 @@ Ignore += varpred_*.*.tar.gz
 
 ## We don't need to preserve yml as defined in $(knitmd)
 makemd = echo "library(rmarkdown); render(\"$^\", \"md_document\")" | R --slave
+makepdf = echo "library(rmarkdown); render(\"$^\", \"pdf_document\")" | R --slave
 
 autopipeR = defined
 
@@ -34,6 +35,9 @@ Sources += README.md
 Sources += README.Rmd 
 README.md: README.Rmd
 	$(makemd)
+
+vignettes/varpred_intro.pdf: vignettes/vapred_intro.Rmd
+	$(makepdf)
 
 ######################################################################
 
@@ -48,6 +52,7 @@ pkgsExport.Rout: R/pkgsExport.R
 ######################################################################
 
 install:
+	make vignettes/varpred_intro.pdf
 	make update-doc && make build-package && make install-tarball && make README.md
 	make pkg-site
 

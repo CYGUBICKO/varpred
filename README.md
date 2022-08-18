@@ -11,8 +11,23 @@ status](https://www.r-pkg.org/badges/version/varpred)](https://CRAN.R-project.or
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-This package implements two approaches for constructing outcome plots
-(prediction and effect plots). These include:
+The development of this package is motivated by the water, sanitation,
+and hygiene (WaSH) data in which we were interested in investigating the
+contribution of demographic and socio-economic factors to improved WaSH
+indicators among the slum dwellers in Nairobi, Kenya. We noticed that
+the predictions we generated using the existing packages consistently
+over- or under- estimated the observed proportions; and did not align
+well with the observed data points. In other words, what we call . There
+are several (challenges) reasons for this, including:
+
+-   the choice of the
+-   uncertainty estimation – the choice of for computing confidence
+    intervals
+-   biases induced by non-linear averaging due to non-linear
+    transformation in generalized linear models
+
+It implements two approaches for constructing outcome plots (prediction
+and effect plots). These include:
 
 -   **mean-based** approach
 -   **observed-value** approach

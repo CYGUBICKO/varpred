@@ -41,7 +41,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/vapred_intro.html">Introduction</a>
+    <a class="dropdown-item" href="articles/vapred_intro.html">Outcome plots: uncertainty estimation and bias correction for predictions and effects in simple and generalized linear (mixed) models</a>
   </div>
 </li>
 <li class="nav-item">
@@ -63,7 +63,13 @@
 <div class="page-header"><h1 id="varpred">varpred<a class="anchor" aria-label="anchor" href="#varpred"></a>
 </h1></div>
 <!-- badges: start -->
-<p>This package implements two approaches for constructing outcome plots (prediction and effect plots). These include:</p>
+<p>The development of this package is motivated by the water, sanitation, and hygiene (WaSH) data in which we were interested in investigating the contribution of demographic and socio-economic factors to improved WaSH indicators among the slum dwellers in Nairobi, Kenya. We noticed that the predictions we generated using the existing packages consistently over- or under- estimated the observed proportions; and did not align well with the observed data points. In other words, what we call . There are several (challenges) reasons for this, including:</p>
+<ul>
+<li>the choice of the</li>
+<li>uncertainty estimation – the choice of for computing confidence intervals</li>
+<li>biases induced by non-linear averaging due to non-linear transformation in generalized linear models</li>
+</ul>
+<p>It implements two approaches for constructing outcome plots (prediction and effect plots). These include:</p>
 <ul>
 <li>
 <strong>mean-based</strong> approach</li>

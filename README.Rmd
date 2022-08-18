@@ -19,8 +19,13 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
+The development of this package is motivated by the water, sanitation, and hygiene (WaSH) data in which we were interested in investigating the contribution of demographic and socio-economic factors to improved WaSH indicators among the slum dwellers in Nairobi, Kenya. We noticed that the predictions we generated using the existing packages consistently over- or under- estimated the observed proportions; and did not align well with the observed data points. In other words, what we call \textbf{bias}. There are several (challenges) reasons for this, including:
 
-This package implements two approaches for constructing outcome plots (prediction and effect plots). These include:
+- the choice of the \emph{reference point}
+- uncertainty estimation -- the choice of \emph{anchor} for computing confidence intervals
+- biases induced by non-linear averaging due to non-linear transformation in generalized linear models
+
+It implements two approaches for constructing outcome plots (prediction and effect plots). These include:
 
 - **mean-based** approach
 - **observed-value** approach
