@@ -46,6 +46,34 @@ data.frame.varpred <- function(x, ...) {
 	return(data.frame(df, ...))
 }
 
+#' Return the First or Last Part of a varpred object
+#'
+#' @param x varpred object.
+#' @param ... additional aurguments passed to head.
+#'
+#' @export
+#' @method head varpred
+#' @export head.varpred
+
+head.varpred <- function(x, ...) {
+	df <- as.data.frame(x)
+	return(head(df, ...))
+}
+
+#' Return the First or Last Part of a varpred object
+#'
+#' @param x varpred object.
+#' @param ... additional aurguments passed to tail.
+#'
+#' @export
+#' @method tail varpred
+#' @export tail.varpred
+
+tail.varpred <- function(x, ...) {
+	df <- as.data.frame(x)
+	return(tail(df, ...))
+}
+
 #'
 #' @keywords internal
 vareffobj <- function(mod, ...)UseMethod("vareffobj")
@@ -83,7 +111,6 @@ get_model.mm <- function(mod, ...)UseMethod("get_model.mm")
 #' @keywords internal
 prepmod <- function(mod, ...)UseMethod("prepmod")
 
-#' Get focal and prediction means for a varpred object
 #'
 #' @export
-getmeans <- function(object, what=c("estimate", "focal"), focal=NULL, modelname=NULL)UseMethod("getmeans")
+getmeans <- function(object, what=c("both", "estimate", "focal"), focal=NULL, modelname=NULL)UseMethod("getmeans")

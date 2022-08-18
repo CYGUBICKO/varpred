@@ -22,7 +22,7 @@ a dataframe
 Reconstructs data from the fitted model or the environment.
 }
 \details{
-It uses the fitted model and the global environment to reconstruct the data used in the model. If \code{data} option is specified in the model formula, a dataframe with columns corresponding to the variable in the formula is returned. Any transformation, e.g. \code{log} specified in the formula terms is not evaluated on the returned data frame. However, if no is provided, the dataframe is constructed from the formula terms with all transformations evaluated.
+It uses the fitted model and the global environment to reconstruct the data used in the model. If \code{data} option is specified in the model formula, a dataframe with columns corresponding to the variable in the formula is returned. Any transformation, e.g. \code{log} specified in the formula terms is not evaluated on the returned data frame. However, if none is provided as model input, the dataframe is constructed from the formula terms with all transformations evaluated.
 }
 \examples{
 set.seed(4567)

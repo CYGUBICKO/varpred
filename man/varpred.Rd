@@ -128,7 +128,8 @@ pred_mean <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="none",
 pred_observed <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="observed", modelname="observed-value")
 ## Combine all the prediction estimates
 ### With plotit=TRUE no need to plot
-combinevarpred(list(pred_mean, pred_observed), plotit=TRUE)
+pred <- combinevarpred(list(pred_mean, pred_observed), plotit=TRUE)
+print(pred)
 
 }
 \seealso{

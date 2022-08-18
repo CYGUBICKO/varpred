@@ -2,10 +2,50 @@
 % Please edit documentation in R/varpred.R
 \name{getmeans.varpred}
 \alias{getmeans.varpred}
-\title{Get focal and prediction means for a varpred object}
+\title{Varpred means}
 \usage{
-\method{getmeans}{varpred}(object, what = c("estimate", "focal"), focal = NULL, modelname = NULL)
+\method{getmeans}{varpred}(
+  object,
+  what = c("both", "estimate", "focal"),
+  focal = NULL,
+  modelname = NULL
+)
+}
+\arguments{
+\item{object}{\code{\link[varpred]{varpred}} object.}
+
+\item{what}{a character specifying what mean to compute. If \code{"estimate"}, the mean of the central estimate is computed, if \code{"focal"} the mean of the focal predictor, otherwise, both are computed.}
+
+\item{focal}{a character specifying the name of focal predictor. If \code{NULL} (default), \code{x.var} from the \code{object} is used.}
+
+\item{modelname}{character string naming \code{varpred} objects. Useful when comparing several objects.}
+}
+\value{
+a data frame.
 }
 \description{
-Get focal and prediction means for a varpred object
+Compute the mean of central estimates or the focal predictor
+}
+\details{
+Provides a quick way to compare observed data marginal means with that of the central estimate. Current version ignores interactions and averages the \code{fit} column only.
+}
+\examples{
+library(varpred)
+library(ggplot2)
+## Set theme for plots
+varpredtheme()
+## Fit the model
+mod <- lm(mpg ~ wt + hp, mtcars)
+## Effect
+ef <- varpred(mod, "wt")
+head(ef, 3)
+tail(ef, 3)
+
+## Compute means of the predictions
+ef_m <- getmeans(ef, what="both", modelname="estimated")
+print(ef_m)
+# Data mean
+mpg_m <- mean(mtcars$mpg)
+print(mpg_m)
+
 }

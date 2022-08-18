@@ -40,6 +40,9 @@
     <loc>/reference/getmeans.varpred.html</loc>
   </url>
   <url>
+    <loc>/reference/head.varpred.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -56,6 +59,9 @@
   </url>
   <url>
     <loc>/reference/recoverdata.html</loc>
+  </url>
+  <url>
+    <loc>/reference/tail.varpred.html</loc>
   </url>
   <url>
     <loc>/reference/varefftheme.html</loc>

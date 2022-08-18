@@ -26,6 +26,9 @@ combinevarpred(
 
 \item{...}{additional arguments passed to \code{\link[varpred]{plot.varpred}}.}
 }
+\value{
+a \code{varpred} object or a plot.
+}
 \description{
 Combines and plots comparison plots for more than two named varpred objects.
 }
@@ -66,6 +69,10 @@ pred_mean <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="none",
 pred_observed <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="observed", modelname="observed-value")
 ## Combine all the prediction estimates
 ### With plotit=TRUE no need to plot
-combinevarpred(list(pred_mean, pred_observed), plotit=TRUE)
+pred <- combinevarpred(list(pred_mean, pred_observed), plotit=TRUE)
+print(pred)
 
+}
+\seealso{
+\code{\link[varpred]{varpred}}
 }

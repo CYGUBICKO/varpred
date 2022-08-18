@@ -39,7 +39,7 @@
 #' @param returnall logical. If \code{TRUE}, all other named computed quantities are also returned. 
 #'
 #' @seealso
-#'\code{\link[varpred]{plot.varpred}}
+#' \code{\link[varpred]{plot.varpred}}
 #'
 #' @examples
 #' # Set theme for ggplot. Comment out if not needed
@@ -420,7 +420,7 @@ zero_vcov <- function(m, focal_vars, complete) {
 #' @param ... for future implementations
 #'
 #' @details
-#' It uses the fitted model and the global environment to reconstruct the data used in the model. If \code{data} option is specified in the model formula, a dataframe with columns corresponding to the variable in the formula is returned. Any transformation, e.g. \code{log} specified in the formula terms is not evaluated on the returned data frame. However, if no is provided, the dataframe is constructed from the formula terms with all transformations evaluated.
+#' It uses the fitted model and the global environment to reconstruct the data used in the model. If \code{data} option is specified in the model formula, a dataframe with columns corresponding to the variable in the formula is returned. Any transformation, e.g. \code{log} specified in the formula terms is not evaluated on the returned data frame. However, if none is provided as model input, the dataframe is constructed from the formula terms with all transformations evaluated.
 #'
 #' @return a dataframe
 #'
@@ -476,13 +476,17 @@ recoverdata <- function(mod, extras = NULL, envir = environment(formula(mod)), .
 #' @param margindex an integer vector indexing the \code{vlist}. Useful if particular \code{vlist} needs to be averaged together in the \code{addmarginals}.
 #' @param ... additional arguments passed to \code{\link[varpred]{plot.varpred}}.
 #'
+#' @return a \code{varpred} object or a plot.
+#'
 #' @inherit varpred return examples
+#'
+#' @seealso
+#' \code{\link[varpred]{varpred}}
 #'
 #' @export 
 #'
 
 combinevarpred <- function(vlist, lnames=NULL, plotit=FALSE, addmarginals=FALSE, margindex, ...) {
-	# TODO: Automatically check the model names, if missing add automatically
 	if (!is.list(vlist))stop("vlist should be a list of objects of class varpred")
 	nobjs <- length(vlist)
 	if (!is.null(lnames)) {
@@ -493,10 +497,12 @@ combinevarpred <- function(vlist, lnames=NULL, plotit=FALSE, addmarginals=FALSE,
 		if (!is.null(lnames)) {
 			pp$.varpred <- lnames[[v]]
 		}
+		if (is.null(attr(pp, "modelname"))) {
+			pp$model <- paste0("varpred", v)
+		}
 		return(pp)
 	})
 	preds <- do.call("rbind", preds)
-	## TODO: Use getmeans
 	if (addmarginals) {
 		if (missing(margindex)) margindex <- 1:nobjs
 		marg_df <- lapply(margindex, function(i){
@@ -536,11 +542,43 @@ combinevarpred <- function(vlist, lnames=NULL, plotit=FALSE, addmarginals=FALSE,
 	}
 }
 
-#' Get focal and prediction means for a varpred object
+#' Varpred means
 #'
+#' Compute the mean of central estimates or the focal predictor
+#'
+#' @details
+#'
+#' Provides a quick way to compare observed data marginal means with that of the central estimate. Current version ignores interactions and averages the \code{fit} column only. 
+#'
+#' @param object \code{\link[varpred]{varpred}} object.
+#' @param what a character specifying what mean to compute. If \code{"estimate"}, the mean of the central estimate is computed, if \code{"focal"} the mean of the focal predictor, otherwise, both are computed.
+#' @param focal a character specifying the name of focal predictor. If \code{NULL} (default), \code{x.var} from the \code{object} is used.
+#' @param modelname character string naming \code{varpred} objects. Useful when comparing several objects.
+#'
+#' @return a data frame.
+#'
+#' @examples
+#' library(varpred)
+#' library(ggplot2)
+#' ## Set theme for plots
+#' varpredtheme()
+#' ## Fit the model
+#' mod <- lm(mpg ~ wt + hp, mtcars)
+#' ## Effect
+#' ef <- varpred(mod, "wt")
+#' head(ef, 3)
+#' tail(ef, 3)
+#'
+#' ## Compute means of the predictions
+#' ef_m <- getmeans(ef, what="both", modelname="estimated")
+#' print(ef_m)
+#' # Data mean
+#' mpg_m <- mean(mtcars$mpg)
+#' print(mpg_m)
+#' 
 #' @export
 
-getmeans.varpred <- function(object, what=c("estimate", "focal"), focal=NULL, modelname=NULL) {
+getmeans.varpred <- function(object, what=c("both", "estimate", "focal"), focal=NULL, modelname=NULL) {
 	what <- match.arg(what)
 	preds <- object$preds
 	if (is.null(modelname)) modelname <- attr(preds, "modelname")
@@ -549,14 +587,26 @@ getmeans.varpred <- function(object, what=c("estimate", "focal"), focal=NULL, mo
 		if(is.null(focal)) {
 			focal <- attr(preds, "x.var")
 		}
-	} else {
+	} else if (what=="estimate") {
 		focal <- "fit"
+	} else {
+		if(is.null(focal)) {
+			focal <- attr(preds, "x.var")
+		}
+		focal2 <- "fit"
 	}
+
 	out <- preds[[focal]]
 	if (any(class(out) %in% c("factor", "character"))) {
-		out <- as.character(unique(out))
+		out <- data.frame(fit=as.character(unique(out)), model=modelname)
 	} else {
 		out <- data.frame(fit=mean(out, na.rm=TRUE), model=modelname)
+	}
+	colnames(out) <- c(focal, "model")
+
+	if (what=="both") {
+		out[[focal2]] <- mean(preds[[focal2]], na.rm=TRUE)
+		out <- out[, c(focal, focal2, "model")]
 	}
 	return(out)
 }
