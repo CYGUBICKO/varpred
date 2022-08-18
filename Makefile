@@ -15,11 +15,12 @@ Sources += $(wildcard vignettes/*.Rmd)
 Sources += $(wildcard *.R R/*.R)
 Sources += $(wildcard man/*.Rd) NAMESPACE DESCRIPTION
 Sources += $(wildcard man/figures/*)
-Sources += $(wildcard docs/*)
+Sources += $(wildcard docs/*.*)
 
 Ignore += README.html
 Ignore += *.md.args
 Ignore += vignettes/.gitignore
+Ignore += vignettes/*.pdf
 Ignore += .gitignore
 Ignore += varpred_*.*.tar.gz
 
