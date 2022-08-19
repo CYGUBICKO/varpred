@@ -179,3 +179,36 @@ In the absence of interaction (left Figure), the three packages produce identica
 
 The packages `emmeans` and `effects` use the average of the input variables (mean of `disp` and `hp`) as the reference point as opposed to model-center approach `varpred` (average of the linear predictor variables). In the simple model (left Figure above) input variables are the same as the linear predictor variables, so all the three methods produce identical results. In the interaction model (right Figure above), there is an additional linear predictor variable (`disp*hp`). `emmeans` and `effects` first average the input variables to compute $\mathrm{\bar{disp}}\star\mathrm{\bar{hp}}$ while `varpred` first calculates the corresponding vector of linear predictor values and then averages.
 
+
+## Prediction and effect plots
+
+The major distinction between the two lies on how we describe the uncertainty around the central estimates (trend lines in the previous Figures). The prediction plot captures all the sources of uncertainty, including that of intercept, non-focal predictors and random effects. On the other hand, effect plot takes into account the uncertainty associated with the focal predictor only. This way, we expect an effect plot to have narrower confidence intervals (CIs) then a prediction plot.
+
+It is not easy to generate effect plots in `emmeans` and `effects`. A possible way to achieve this in `emmeans` and `effects` is to use a zeroed-out (see `varpred::zero_vcov`) covariance matrix, but this only works when the input variables are centered prior to model fitting, in case of numerical variables, and more complicated when the input variables are categorical.
+
+
+In `varpred`, to generate effect plot, we set `isolate=TRUE` (default), otherwise (`isolate=FALSE`) prediction plot. We consider `vpred1` generated above, which is an effect plot, and now generate a prediction for the same model (`mod1`).
+
+```{r simple-pred-effect}
+## prediction-styled plot: set isolate=FALSE
+vpred1_pred <- varpred(mod=mod1
+	, focal_predictors="wt"
+	, isolate=FALSE
+	, at=list(wt=wt_values)
+	, bias.adjust="none"
+	, modelname="prediction"
+)
+
+## Since we already named vpred1 as 'varpred: no interaction', 
+## we rename it 
+vpred1$preds$model <- "effects"
+
+p2 <- (list(vpred1, vpred1_pred)
+	|> combinevarpred(plotit=TRUE)
+	+ geom_hline(data=df_mean, aes(yintercept=mpg, color=model, linetype=model)) 
+	+ geom_vline(xintercept=mean(wt_values), lty=2)
+)
+print(p2)
+```
+
+The Figure above shows a prediction (-styled) and an effect (-styled) plot. The horizontal line is the mean of the data (mean of `mpg`) while the vertical one is the mean of the focal predictor (`wt`) -- we call this _center point_. The wider curves correspond to the conventional prediction curves (prediction-styled plot), while the narrower curves crossing at the center point. For a simple linear model, effect-styled curves cross at the center point. In other words, effects-styled plots provide a way to generate effects indicating uncertainty due only to _changes_ in the focal predictor.

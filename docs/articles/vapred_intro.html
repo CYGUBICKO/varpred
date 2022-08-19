@@ -230,6 +230,35 @@
 <p>In the absence of interaction (left Figure), the three packages produce identical estimates and their respective averages closely match the data mean. However, in the presence of interactions, the estimates from <code>emmeans</code> and <code>effects</code> are identical but differ from <code>varpred</code>’s, which is very close to the data mean.</p>
 <p>The packages <code>emmeans</code> and <code>effects</code> use the average of the input variables (mean of <code>disp</code> and <code>hp</code>) as the reference point as opposed to model-center approach <code>varpred</code> (average of the linear predictor variables). In the simple model (left Figure above) input variables are the same as the linear predictor variables, so all the three methods produce identical results. In the interaction model (right Figure above), there is an additional linear predictor variable (<code>disp*hp</code>). <code>emmeans</code> and <code>effects</code> first average the input variables to compute <span class="math inline">\(\mathrm{\bar{disp}}\star\mathrm{\bar{hp}}\)</span> while <code>varpred</code> first calculates the corresponding vector of linear predictor values and then averages.</p>
 </div>
+<div class="section level3">
+<h3 id="prediction-and-effect-plots">Prediction and effect plots<a class="anchor" aria-label="anchor" href="#prediction-and-effect-plots"></a>
+</h3>
+<p>The major distinction between the two lies on how we describe the uncertainty around the central estimates (trend lines in the previous Figures). The prediction plot captures all the sources of uncertainty, including that of intercept, non-focal predictors and random effects. On the other hand, effect plot takes into account the uncertainty associated with the focal predictor only. This way, we expect an effect plot to have narrower confidence intervals (CIs) then a prediction plot.</p>
+<p>It is not easy to generate effect plots in <code>emmeans</code> and <code>effects</code>. A possible way to achieve this in <code>emmeans</code> and <code>effects</code> is to use a zeroed-out (see <code><a href="../reference/zero_vcov.html">varpred::zero_vcov</a></code>) covariance matrix, but this only works when the input variables are centered prior to model fitting, in case of numerical variables, and more complicated when the input variables are categorical.</p>
+<p>In <code>varpred</code>, to generate effect plot, we set <code>isolate=TRUE</code> (default), otherwise (<code>isolate=FALSE</code>) prediction plot. We consider <code>vpred1</code> generated above, which is an effect plot, and now generate a prediction for the same model (<code>mod1</code>).</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## prediction-styled plot: set isolate=FALSE</span>
+<span class="va">vpred1_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span>mod<span class="op">=</span><span class="va">mod1</span>
+    , focal_predictors<span class="op">=</span><span class="st">"wt"</span>
+    , isolate<span class="op">=</span><span class="cn">FALSE</span>
+    , at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>wt<span class="op">=</span><span class="va">wt_values</span><span class="op">)</span>
+    , bias.adjust<span class="op">=</span><span class="st">"none"</span>
+    , modelname<span class="op">=</span><span class="st">"prediction"</span>
+<span class="op">)</span>
+
+<span class="co">## Since we already named vpred1 as 'varpred: no interaction', </span>
+<span class="co">## we rename it </span>
+<span class="va">vpred1</span><span class="op">$</span><span class="va">preds</span><span class="op">$</span><span class="va">model</span> <span class="op">&lt;-</span> <span class="st">"effects"</span>
+
+<span class="va">p2</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">vpred1</span>, <span class="va">vpred1_pred</span><span class="op">)</span>
+    |&gt; <span class="fu"><a href="../reference/combinevarpred.html">combinevarpred</a></span><span class="op">(</span>plotit<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+    <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">df_mean</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>yintercept<span class="op">=</span><span class="va">mpg</span>, color<span class="op">=</span><span class="va">model</span>, linetype<span class="op">=</span><span class="va">model</span><span class="op">)</span><span class="op">)</span> 
+    <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">wt_values</span><span class="op">)</span>, lty<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></code></pre></div>
+<p><img src="vapred_intro_files/figure-html/simple-pred-effect-1.png" width="700"></p>
+<p>The Figure above shows a prediction (-styled) and an effect (-styled) plot. The horizontal line is the mean of the data (mean of <code>mpg</code>) while the vertical one is the mean of the focal predictor (<code>wt</code>) – we call this <em>center point</em>. The wider curves correspond to the conventional prediction curves (prediction-styled plot), while the narrower curves crossing at the center point. For a simple linear model, effect-styled curves cross at the center point. In other words, effects-styled plots provide a way to generate effects indicating uncertainty due only to <em>changes</em> in the focal predictor.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
