@@ -246,8 +246,7 @@
     , modelname<span class="op">=</span><span class="st">"prediction"</span>
 <span class="op">)</span>
 
-<span class="co">## Since we already named vpred1 as 'varpred: no interaction', </span>
-<span class="co">## we rename it </span>
+<span class="co">## Rename vpred1</span>
 <span class="va">vpred1</span><span class="op">$</span><span class="va">preds</span><span class="op">$</span><span class="va">model</span> <span class="op">&lt;-</span> <span class="st">"effects"</span>
 
 <span class="va">p2</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">vpred1</span>, <span class="va">vpred1_pred</span><span class="op">)</span>
@@ -258,6 +257,35 @@
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></code></pre></div>
 <p><img src="vapred_intro_files/figure-html/simple-pred-effect-1.png" width="700"></p>
 <p>The Figure above shows a prediction (-styled) and an effect (-styled) plot. The horizontal line is the mean of the data (mean of <code>mpg</code>) while the vertical one is the mean of the focal predictor (<code>wt</code>) – we call this <em>center point</em>. The wider curves correspond to the conventional prediction curves (prediction-styled plot), while the narrower curves crossing at the center point. For a simple linear model, effect-styled curves cross at the center point. In other words, effects-styled plots provide a way to generate effects indicating uncertainty due only to <em>changes</em> in the focal predictor.</p>
+</div>
+<div class="section level3">
+<h3 id="anchor">Anchor<a class="anchor" aria-label="anchor" href="#anchor"></a>
+</h3>
+<p>To generate an effect-styled plot, we need a value of the focal predictor to compute CIs. We call this an <em>anchor</em>. The anchor choice does not affect the central estimate, nor prediction-style plot. The default value is the center point of the linear predictor variables corresponding to the focal predictor. For example, in the previous Figure, mean of <code>wt</code> is used as the default choice.</p>
+<p>This is particularly important when we want to show an effect at a particular value of the focal predictor other than its mean (center point). For example, at <span class="math inline">\(0\)</span>, minimum of the focal predictor, etc. To implement this in <strong>varpred</strong>, set the anchor value using <code>isolate.value</code> and <code>isolate</code> must be <code>TRUE</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Min of wt</span>
+<span class="va">anchor0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod1</span>
+    , <span class="st">"wt"</span>
+    , isolate<span class="op">=</span><span class="cn">TRUE</span>
+    , isolate.value<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">wt</span><span class="op">)</span> <span class="co"># min anchor</span>
+    , modelname<span class="op">=</span><span class="st">"min"</span>
+<span class="op">)</span>
+
+<span class="co">## mean-anchored (default)</span>
+<span class="va">anchor0.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod1</span>
+    , <span class="st">"wt"</span>
+    , isolate<span class="op">=</span><span class="cn">TRUE</span>
+    , modelname<span class="op">=</span><span class="st">"mean"</span>
+<span class="op">)</span>
+
+<span class="va">p3</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">anchor0</span>, <span class="va">anchor0.5</span><span class="op">)</span>
+    |&gt; <span class="fu"><a href="../reference/combinevarpred.html">combinevarpred</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># No plot</span>
+    |&gt; <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span>
+    <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"Anchor"</span>, linetype<span class="op">=</span><span class="st">"Anchor"</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></code></pre></div>
+<p><img src="vapred_intro_files/figure-html/simple-anchor-1.png" width="700"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

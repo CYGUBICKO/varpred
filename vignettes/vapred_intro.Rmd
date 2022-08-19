@@ -199,8 +199,7 @@ vpred1_pred <- varpred(mod=mod1
 	, modelname="prediction"
 )
 
-## Since we already named vpred1 as 'varpred: no interaction', 
-## we rename it 
+## Rename vpred1
 vpred1$preds$model <- "effects"
 
 p2 <- (list(vpred1, vpred1_pred)
@@ -212,3 +211,33 @@ print(p2)
 ```
 
 The Figure above shows a prediction (-styled) and an effect (-styled) plot. The horizontal line is the mean of the data (mean of `mpg`) while the vertical one is the mean of the focal predictor (`wt`) -- we call this _center point_. The wider curves correspond to the conventional prediction curves (prediction-styled plot), while the narrower curves crossing at the center point. For a simple linear model, effect-styled curves cross at the center point. In other words, effects-styled plots provide a way to generate effects indicating uncertainty due only to _changes_ in the focal predictor.
+
+## Anchor
+
+To generate an effect-styled plot, we need a value of the focal predictor to compute CIs. We call this an _anchor_. The anchor choice does not affect the central estimate, nor prediction-style plot. The default value is the center point of the linear predictor variables corresponding to the focal predictor. For example, in the previous Figure, mean of `wt` is used as the default choice. 
+
+This is particularly important when we want to show an effect at a particular value of the focal predictor other than its mean (center point). For example, at $0$, minimum of the focal predictor, etc. To implement this in **varpred**, set the anchor value using `isolate.value` and `isolate` must be `TRUE`.
+
+```{r simple-anchor}
+## Min of wt
+anchor0 <- varpred(mod1
+	, "wt"
+	, isolate=TRUE
+	, isolate.value=min(df$wt) # min anchor
+	, modelname="min"
+)
+
+## mean-anchored (default)
+anchor0.5 <- varpred(mod1
+	, "wt"
+	, isolate=TRUE
+	, modelname="mean"
+)
+
+p3 <- (list(anchor0, anchor0.5)
+	|> combinevarpred() # No plot
+	|> plot()
+	+ labs(colour="Anchor", linetype="Anchor")
+)
+print(p3)
+```
