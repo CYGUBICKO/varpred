@@ -92,7 +92,7 @@
 <h3 id="mean-based-approach">Mean-based approach<a class="anchor" aria-label="anchor" href="#mean-based-approach"></a>
 </h3>
 <p>In a model with non-focal predictors such as multivariate models, reference points (values chosen for non-focal predictors) can be chosen as the average of the non-focal <em>linear predictor variables</em> (columns of the model matrix corresponding to non-focal predictors) – we call this approach <em>mean-based</em> reference point and is currently not implemented in commonly used <strong>R</strong> software .</p>
-<p>To illustrate this, we use <code>mtcars</code> dataset to fit two models: 1) one without interaction, and 2) one with interaction between predictors.</p>
+<p>To illustrate this, we use <code><a href="https://rdrr.io/r/datasets/mtcars.html" class="external-link">datasets::mtcars</a></code> dataset to fit two models: 1) one without interaction, and 2) one with interaction between predictors.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/mtcars.html" class="external-link">mtcars</a></span>
 
@@ -180,7 +180,7 @@
 <code>attrvpred</code>: converts <code>emmeans</code> and <code>effects</code> objects to <code>varpred</code>
 </li>
 <li>
-<code>getmeans</code>: calculates marginal means of the estimates to compare with the data mean (mean of observed data)</li>
+<code>varpred::getmeans</code>: calculates marginal means of the estimates to compare with the data mean (mean of observed data)</li>
 </ul>
 <p>The plot below compares the central estimates (trend lines), together with their mean (horizontal lines) with the data mean (mean of <code>mpg</code>) and the observed data (grey points).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -227,7 +227,8 @@
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></code></pre></div>
 <p><img src="vapred_intro_files/figure-html/simple-mean-based-combine-1.png" width="700"></p>
-<p>Does this work?</p>
+<p>In the absence of interaction (left Figure), the three packages produce identical estimates and their respective averages closely match the data mean. However, in the presence of interactions, the estimates from <code>emmeans</code> and <code>effects</code> are identical but differ from <code>varpred</code>’s, which is very close to the data mean.</p>
+<p>The packages <code>emmeans</code> and <code>effects</code> use the average of the input variables (mean of <code>disp</code> and <code>hp</code>) as the reference point as opposed to model-center approach <code>varpred</code> (average of the linear predictor variables). In the simple model (left Figure above) input variables are the same as the linear predictor variables, so all the three methods produce identical results. In the interaction model (right Figure above), there is an additional linear predictor variable (<code>disp*hp</code>). <code>emmeans</code> and <code>effects</code> first average the input variables to compute <span class="math inline">\(\mathrm{\bar{disp}}\star\mathrm{\bar{hp}}\)</span> while <code>varpred</code> first calculates the corresponding vector of linear predictor values and then averages.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -33,7 +33,7 @@ An outcome plot (often called effect or prediction plot), plots _focal_ predicto
 
 In a model with non-focal predictors such as multivariate models, reference points (values chosen for non-focal predictors) can be chosen as the average of the non-focal _linear predictor variables_ (columns of the model matrix corresponding to non-focal predictors) -- we call this approach _mean-based_ reference point and is currently not implemented in commonly used **R** software \textbf{packages}.
 
-To illustrate this, we use `mtcars` dataset to fit two models: 1) one without interaction, and 2) one with interaction between predictors.
+To illustrate this, we use `datasets::mtcars` dataset to fit two models: 1) one without interaction, and 2) one with interaction between predictors.
 
 ```{r simple-mean-based-mod}
 df <- datasets::mtcars
@@ -126,7 +126,7 @@ colnames(ef2) <- names_use
 We can use `varpred::combinevarpred` to combine and compared the estimates:
 
 - `attrvpred`: converts `emmeans` and `effects` objects to `varpred` 
-- `getmeans`: calculates marginal means of the estimates to compare with the data mean (mean of observed data)
+- `varpred::getmeans`: calculates marginal means of the estimates to compare with the data mean (mean of observed data)
 
 The plot below compares the central estimates (trend lines), together with their mean (horizontal lines) with the data mean (mean of `mpg`) and the observed data (grey points).
 
@@ -175,4 +175,7 @@ p1 <- (combinevarpred(all_preds, plotit=TRUE, ci=FALSE)
 print(p1)
 ```
 
-Does this work?
+In the absence of interaction (left Figure), the three packages produce identical estimates and their respective averages closely match the data mean. However, in the presence of interactions, the estimates from `emmeans` and `effects` are identical but differ from `varpred`'s, which is very close to the data mean. 
+
+The packages `emmeans` and `effects` use the average of the input variables (mean of `disp` and `hp`) as the reference point as opposed to model-center approach `varpred` (average of the linear predictor variables). In the simple model (left Figure above) input variables are the same as the linear predictor variables, so all the three methods produce identical results. In the interaction model (right Figure above), there is an additional linear predictor variable (`disp*hp`). `emmeans` and `effects` first average the input variables to compute $\mathrm{\bar{disp}}\star\mathrm{\bar{hp}}$ while `varpred` first calculates the corresponding vector of linear predictor values and then averages.
+

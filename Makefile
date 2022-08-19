@@ -15,7 +15,7 @@ Sources += $(wildcard vignettes/*.Rmd)
 Sources += $(wildcard *.R R/*.R)
 Sources += $(wildcard man/*.Rd) NAMESPACE DESCRIPTION
 Sources += $(wildcard man/figures/*)
-Sources += $(wildcard docs/*.*)
+Sources += $(wildcard docs/*)
 
 Ignore += README.html
 Ignore += *.md.args
