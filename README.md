@@ -73,14 +73,14 @@ We use `mtcars` data to show outcome plots:
     ef <- varpred(mod, "wt", isolate=TRUE, modelname="effect")
     plot(ef)
 
-<img src="man/figures/simple_example-1.png" width="100%" />
+![](man/figures/simple_example-1.png)
 
 
     ## Prediction
     pred <- varpred(mod, "wt", isolate=FALSE, modelname="prediction")
     plot(pred)
 
-<img src="man/figures/simple_example-2.png" width="100%" />
+![](man/figures/simple_example-2.png)
 
 
     ## Compare effect and prediction
@@ -93,4 +93,4 @@ We use `mtcars` data to show outcome plots:
         + labs(colour="Method", linetype="Method")
     )
 
-<img src="man/figures/simple_example-3.png" width="100%" />
+![](man/figures/simple_example-3.png)

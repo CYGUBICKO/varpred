@@ -305,6 +305,9 @@
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span></code></pre></div>
 <p><img src="vapred_intro_files/figure-html/simple-observed-1.png" width="700"></p>
+<div class="section level4">
+<h4 id="bias-correction">Bias correction<a class="anchor" aria-label="anchor" href="#bias-correction"></a>
+</h4>
 <p>In a simple linear model, such as <code>mod1</code>, all the averaging is done on the linear scale, hence there is not effect of non-linear averaging. Consequently, the estimates are similar, as shown in the previous Figure. However, in a model with non-linear link function such as generalized models, this is not usually true. To demonstrate this, we simulate a binary outcome with two predictors as shown below.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">911</span><span class="op">)</span>
@@ -378,6 +381,7 @@
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ef</span><span class="op">)</span></code></pre></div>
 <p><img src="vapred_intro_files/figure-html/nonlinear-observed-plot-1.png" width="700"></p>
 <p>The difference in mean-based and observed-value-based is due to the bias induced by the non-focal predictor and the non-linear averaging in the logistic model. The mean-based approach is affected by the non-linear averaging. As a result, the observed-value approach estimates are more aligned to the observed data than the mean-based approach, see previous Figure.</p>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

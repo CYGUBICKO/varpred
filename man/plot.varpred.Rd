@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotsfuns.R
 \name{plot.varpred}
 \alias{plot.varpred}
-\title{Plot  predictions}
+\title{Outcome plots}
 \usage{
 \method{plot}{varpred}(
   x,
@@ -17,33 +17,57 @@
 )
 }
 \arguments{
-\item{x}{\code{\link[varpred]{varpred}} object}
+\item{x}{\code{\link[varpred]{varpred}} object.}
 
-\item{...}{for future implementations}
+\item{...}{for future implementations.}
 
 \item{xlabs}{x-axis label. If \code{NULL}, default, \code{x.var} is used.}
 
 \item{ylabs}{y-axis label. If \code{NULL}, default, the response label is used.}
 
-\item{xtrans_fun}{function to transform x values to the original or other scales. Useful when x was transformed prior to model fitting.}
+\item{xtrans_fun}{function to transform x values to the original or other scales. Useful when x was transformed prior to model fitting. See examples.}
 
 \item{pos}{spacing between labels of categorical variable on the plot.}
+
+\item{ci}{logical. If \code{TRUE} (default), the confidence intervals (indicating prediction or effect) are plotted, otherwise, only the central estimate is plotted.}
+
+\item{facet_scales}{should scales be fixed ("fixed", the default), free ("free"), or free in one dimension ("free_x", "free_y")?}
+
+\item{facet_ncol}{number of facet columns.}
 }
 \value{
 a \code{\link[ggplot2]{ggplot}} object.
 }
 \description{
-Plots estimated conditional or marginal predictions.
+Plot \code{\link[varpred]{varpred}} object.
 }
 \examples{
 set.seed(4567)
-x <- rnorm(100, 3, 5)
-y <- 0.4 + 0.7*x + rnorm(100)
+N <- 100
+x <- rnorm(N, 3, 5)
+y <- 5 + 0.2*x + rnorm(N)
 df <- data.frame(y = y, x = x)
 m1 <- lm(y ~ x, df)
-
-pred1 <- varpred(m1, "x")
+pred1 <- varpred(m1, "x", modelname="original")
 plot(pred1)
+
+## We can transform the predictor, fit the model and then
+## back-transform the predictions in the plot
+backtfun <- function(x, m, s) {
+	x <- m + x*s
+	return(x)
+}
+x_scaled <- scale(df$x)
+m <- attr(x_scaled, "scaled:center")
+s <- attr(x_scaled, "scaled:scale")
+df$x <- as.vector(x_scaled)
+m2 <- lm(y ~ x, df)
+pred2 <- varpred(m2, "x", modelname="scaled")
+# Compare the predictions
+combinevarpred(list(pred1, pred2), plotit=TRUE)
+
+# Display focal predictor on the original scale
+plot(pred2, xtrans_fun=function(x)backtfun(x, m=m, s=s))
 
 }
 \seealso{

@@ -262,6 +262,8 @@ p4 <- (list(vpred_mean, vpred_observed)
 print(p4)
 ```
 
+### Bias correction
+
 In a simple linear model, such as `mod1`, all the averaging is done on the linear scale, hence there is not effect of non-linear averaging. Consequently, the estimates are similar, as shown in the previous Figure. However, in a model with non-linear link function such as generalized models, this is not usually true. To demonstrate this, we simulate a binary outcome with two predictors as shown below.
 
 ```{r nonlinear-observed}
