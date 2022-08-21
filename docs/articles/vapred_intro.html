@@ -287,6 +287,98 @@
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></code></pre></div>
 <p><img src="vapred_intro_files/figure-html/simple-anchor-1.png" width="700"></p>
 </div>
+<div class="section level3">
+<h3 id="observed-value-approach">Observed-value approach<a class="anchor" aria-label="anchor" href="#observed-value-approach"></a>
+</h3>
+<p>For a linear model, the averaging is done on the linear scale, i.e., linear averaging. As a result, the model-center estimates (made using the mean-based approach) are unbiased. However, in a model with non-linear link function, this is not usually true. When averaging is done on a separate link scale, the mean of the estimates is not the same as the estimate at the mean point. This leads to bias: in this case a systematic difference between the values seen on average for a given value of the focal predictor and the value predicted by the mean-based approach. An alternative to the mean-based reference point is the <em>observed-value-based</em> approach, which involves computing the prediction over the population of non-focal predictors and then averaging across the values of the focal predictor.</p>
+<p>To implement <code>observed-value-based</code> in <strong>varpred</strong>, we set <code>bias.adjust="observed"</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## mean-based: set bias.adjust="none"</span>
+<span class="va">vpred_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod1</span>, <span class="st">"wt"</span>, bias.adjust<span class="op">=</span><span class="st">"none"</span>, modelname<span class="op">=</span><span class="st">"mean-based"</span><span class="op">)</span>
+
+<span class="co">## observed-value: set bias.adjust="observed"</span>
+<span class="va">vpred_observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod1</span>, <span class="st">"wt"</span>, bias.adjust<span class="op">=</span><span class="st">"observed"</span>, modelname<span class="op">=</span><span class="st">"observed-value"</span><span class="op">)</span>
+
+<span class="va">p4</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">vpred_mean</span>, <span class="va">vpred_observed</span><span class="op">)</span>
+    |&gt; <span class="fu"><a href="../reference/combinevarpred.html">combinevarpred</a></span><span class="op">(</span>plotit<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+    <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"Approach"</span>, linetype<span class="op">=</span><span class="st">"Approach"</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span></code></pre></div>
+<p><img src="vapred_intro_files/figure-html/simple-observed-1.png" width="700"></p>
+<p>In a simple linear model, such as <code>mod1</code>, all the averaging is done on the linear scale, hence there is not effect of non-linear averaging. Consequently, the estimates are similar, as shown in the previous Figure. However, in a model with non-linear link function such as generalized models, this is not usually true. To demonstrate this, we simulate a binary outcome with two predictors as shown below.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">911</span><span class="op">)</span>
+<span class="co"># Simulate binary outcome data with two predictors</span>
+<span class="va">steps</span> <span class="op">&lt;-</span> <span class="fl">500</span>
+<span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
+<span class="va">b0</span> <span class="op">&lt;-</span> <span class="fl">2</span>
+<span class="va">b_age</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1.5</span>
+<span class="va">b_income</span> <span class="op">&lt;-</span> <span class="fl">1.8</span>
+<span class="va">min_age</span> <span class="op">&lt;-</span> <span class="fl">18</span>
+<span class="va">age</span> <span class="op">&lt;-</span> <span class="va">min_age</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">N</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>
+<span class="va">min_income</span> <span class="op">&lt;-</span> <span class="fl">15</span>
+<span class="va">income</span> <span class="op">&lt;-</span> <span class="va">min_income</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">N</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>
+<span class="va">eta</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">age</span><span class="op">*</span><span class="va">b_age</span> <span class="op">+</span> <span class="va">income</span><span class="op">*</span><span class="va">b_income</span>
+<span class="va">status</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">N</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">plogis</a></span><span class="op">(</span><span class="va">eta</span><span class="op">)</span><span class="op">)</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">status</span>, <span class="va">age</span>, <span class="va">income</span><span class="op">)</span>
+
+<span class="co"># Fit model</span>
+<span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">status</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">income</span>, <span class="va">df</span>, family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># Effect plots</span>
+<span class="co">## Mean-based</span>
+<span class="va">ef_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"age"</span>, steps<span class="op">=</span><span class="va">steps</span>, bias.adjust<span class="op">=</span><span class="st">"none"</span>, modelname<span class="op">=</span><span class="st">"mean-based"</span><span class="op">)</span>
+<span class="co">## Observed-value-based</span>
+<span class="va">ef_observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"age"</span>, steps<span class="op">=</span><span class="va">steps</span>, bias.adjust<span class="op">=</span><span class="st">"observed"</span>, modelname<span class="op">=</span><span class="st">"observed-value"</span><span class="op">)</span></code></pre></div>
+<p>We write a simple function to add binned observations, i.e., proportion of observed outcomes falling within particular bin:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Generate binned observations</span>
+<span class="co">### mod: data.frame or mod object (df preferable)</span>
+<span class="va">binfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mod</span>, <span class="va">focal</span>, <span class="va">bins</span><span class="op">=</span><span class="fl">50</span>, <span class="va">groups</span><span class="op">=</span><span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, quietly<span class="op">=</span><span class="cn">TRUE</span>, warn.conflicts<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
+    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">groups</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+        <span class="va">bins_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">groups</span>, <span class="st">"bin"</span><span class="op">)</span>
+    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+        <span class="va">bins_all</span> <span class="op">&lt;-</span> <span class="st">"bin"</span>
+    <span class="op">}</span>
+    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"data.frame"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+        <span class="va">mf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">model.frame</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
+    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+        <span class="va">mf</span> <span class="op">&lt;-</span> <span class="va">mod</span>
+    <span class="op">}</span>
+    <span class="va">N</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">mf</span><span class="op">)</span>
+    <span class="va">check_df</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">mf</span>
+        |&gt; <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange_all.html" class="external-link">arrange_at</a></span><span class="op">(</span><span class="va">focal</span><span class="op">)</span>
+        |&gt; <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>bin<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">*</span><span class="va">bins</span><span class="op">/</span><span class="va">N</span><span class="op">)</span><span class="op">)</span>
+        |&gt; <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by_all.html" class="external-link">group_by_at</a></span><span class="op">(</span><span class="va">bins_all</span><span class="op">)</span>
+        |&gt; <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html" class="external-link">summarise_all</a></span><span class="op">(</span><span class="va">mean</span><span class="op">)</span>
+        |&gt; <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>model<span class="op">=</span><span class="st">"binned"</span><span class="op">)</span>
+    <span class="op">)</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">check_df</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="va">binned_df</span> <span class="op">&lt;-</span> <span class="fu">binfun</span><span class="op">(</span><span class="va">mod</span>, <span class="st">"age"</span>, bins<span class="op">=</span><span class="fl">50</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">binned_df</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span>
+<span class="co">#&gt;     bin status   age income model </span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1   1     15.6   15.0 binned</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2   1     16.1   15.4 binned</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3   0.95  16.4   14.8 binned</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     4   1     16.6   15.1 binned</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     5   1     16.7   15.1 binned</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     6   0.9   16.8   15.0 binned</span></code></pre></div>
+<p>We combine the <code>varpred</code> objects and add the observed values (binned).</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Combine all the effect estimates</span>
+<span class="va">ef</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ef_mean</span>, <span class="va">ef_observed</span><span class="op">)</span>
+    |&gt; <span class="fu"><a href="../reference/combinevarpred.html">combinevarpred</a></span><span class="op">(</span>plotit<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+    <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">binned_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y<span class="op">=</span><span class="va">status</span><span class="op">)</span>, colour<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ef</span><span class="op">)</span></code></pre></div>
+<p><img src="vapred_intro_files/figure-html/nonlinear-observed-plot-1.png" width="700"></p>
+<p>The difference in mean-based and observed-value-based is due to the bias induced by the non-focal predictor and the non-linear averaging in the logistic model. The mean-based approach is affected by the non-linear averaging. As a result, the observed-value approach estimates are more aligned to the observed data than the mean-based approach, see previous Figure.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

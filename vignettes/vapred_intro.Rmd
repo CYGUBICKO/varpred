@@ -241,3 +241,96 @@ p3 <- (list(anchor0, anchor0.5)
 )
 print(p3)
 ```
+
+## Observed-value approach
+
+For a linear model, the averaging is done on the linear scale, i.e., linear averaging. As a result, the model-center estimates (made using the mean-based approach) are unbiased. However, in a model with non-linear link function, this is not usually true. When averaging is done on a separate link scale, the mean of the estimates is not the same as the estimate at the mean point. This leads to bias: in this case a systematic difference between the values seen on average for a given value of the focal predictor and the value predicted by the mean-based approach. An alternative to the mean-based reference point is the _observed-value-based_ approach, which involves computing the prediction over the population of non-focal predictors and then averaging across the values of the focal predictor.
+
+To implement `observed-value-based` in **varpred**, we set `bias.adjust="observed"`. 
+
+```{r simple-observed}
+## mean-based: set bias.adjust="none"
+vpred_mean <- varpred(mod1, "wt", bias.adjust="none", modelname="mean-based")
+
+## observed-value: set bias.adjust="observed"
+vpred_observed <- varpred(mod1, "wt", bias.adjust="observed", modelname="observed-value")
+
+p4 <- (list(vpred_mean, vpred_observed)
+	|> combinevarpred(plotit=TRUE)
+	+ labs(colour="Approach", linetype="Approach")
+)
+print(p4)
+```
+
+In a simple linear model, such as `mod1`, all the averaging is done on the linear scale, hence there is not effect of non-linear averaging. Consequently, the estimates are similar, as shown in the previous Figure. However, in a model with non-linear link function such as generalized models, this is not usually true. To demonstrate this, we simulate a binary outcome with two predictors as shown below.
+
+```{r nonlinear-observed}
+set.seed(911)
+# Simulate binary outcome data with two predictors
+steps <- 500
+N <- 1000
+b0 <- 2
+b_age <- -1.5
+b_income <- 1.8
+min_age <- 18
+age <- min_age + rnorm(N, 0, 1)
+min_income <- 15
+income <- min_income + rnorm(N, 0, 1)
+eta <- b0 + age*b_age + income*b_income
+status <- rbinom(N, 1, plogis(eta))
+df <- data.frame(status, age, income)
+
+# Fit model
+mod <- glm(status ~ age + income, df, family=binomial())
+
+# Effect plots
+## Mean-based
+ef_mean <- varpred(mod, "age", steps=steps, bias.adjust="none", modelname="mean-based")
+## Observed-value-based
+ef_observed <- varpred(mod, "age", steps=steps, bias.adjust="observed", modelname="observed-value")
+```
+
+We write a simple function to add binned observations, i.e., proportion of observed outcomes falling within particular bin:
+
+```{r bin-fun}
+## Generate binned observations
+### mod: data.frame or mod object (df preferable)
+binfun <- function(mod, focal, bins=50, groups=NULL) {
+	require(dplyr, quietly=TRUE, warn.conflicts=FALSE)
+	if (!is.null(groups)) {
+		bins_all <- c(groups, "bin")
+	} else {
+		bins_all <- "bin"
+	}
+	if (!inherits(mod, "data.frame")) {
+		mf <- model.frame(mod)
+	} else {
+		mf <- mod
+	}
+	N <- NROW(mf)
+	check_df <- (mf
+		|> arrange_at(focal)
+		|> mutate(bin=ceiling(row_number()*bins/N))
+		|> group_by_at(bins_all)
+		|> summarise_all(mean)
+		|> mutate(model="binned")
+	)
+	return(check_df)
+}
+
+binned_df <- binfun(mod, "age", bins=50)
+head(binned_df)
+```
+
+We combine the `varpred` objects and add the observed values (binned).
+
+```{r nonlinear-observed-plot}
+## Combine all the effect estimates
+ef <- (list(ef_mean, ef_observed)
+	|> combinevarpred(plotit=TRUE)
+	+ geom_point(data=binned_df, aes(x=age, y=status), colour="grey")
+)
+plot(ef)
+```
+
+The difference in mean-based and observed-value-based is due to the bias induced by the non-focal predictor and the non-linear averaging in the logistic model. The mean-based approach is affected by the non-linear averaging. As a result, the observed-value approach estimates are more aligned to the observed data than the mean-based approach, see previous Figure.
