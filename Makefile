@@ -38,7 +38,7 @@ Sources += README.Rmd
 README.md: README.Rmd
 	$(makemd)
 
-vignettes/varpred_intro.pdf: vignettes/vapred_intro.Rmd
+vignettes/varpred_intro.pdf: vignettes/varpred_intro.Rmd
 	$(makepdf)
 
 ######################################################################

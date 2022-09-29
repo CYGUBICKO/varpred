@@ -41,7 +41,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/vapred_intro.html">Outcome plots</a>
+    <a class="dropdown-item" href="../articles/varpred_intro.html">Outcome plots</a>
   </div>
 </li>
 <li class="nav-item">
@@ -61,14 +61,14 @@
 
 
 
-<script src="vapred_intro_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+<script src="varpred_intro_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Outcome plots</h1>
                         <h4 data-toc-skip class="author">Bicko Cygu, Ben Bolker, Jonathan Dushoff</h4>
             
       
       
-      <div class="d-none name"><code>vapred_intro.Rmd</code></div>
+      <div class="d-none name"><code>varpred_intro.Rmd</code></div>
     </div>
 
     
@@ -226,7 +226,7 @@
     <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">method</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></code></pre></div>
-<p><img src="vapred_intro_files/figure-html/simple-mean-based-combine-1.png" width="700"></p>
+<p><img src="varpred_intro_files/figure-html/simple-mean-based-combine-1.png" width="700"></p>
 <p>In the absence of interaction (left Figure), the three packages produce identical estimates and their respective averages closely match the data mean. However, in the presence of interactions, the estimates from <code>emmeans</code> and <code>effects</code> are identical but differ from <code>varpred</code>’s, which is very close to the data mean.</p>
 <p>The packages <code>emmeans</code> and <code>effects</code> use the average of the input variables (mean of <code>disp</code> and <code>hp</code>) as the reference point as opposed to model-center approach <code>varpred</code> (average of the linear predictor variables). In the simple model (left Figure above) input variables are the same as the linear predictor variables, so all the three methods produce identical results. In the interaction model (right Figure above), there is an additional linear predictor variable (<code>disp*hp</code>). <code>emmeans</code> and <code>effects</code> first average the input variables to compute <span class="math inline">\(\mathrm{\bar{disp}}\star\mathrm{\bar{hp}}\)</span> while <code>varpred</code> first calculates the corresponding vector of linear predictor values and then averages.</p>
 </div>
@@ -255,7 +255,7 @@
     <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">wt_values</span><span class="op">)</span>, lty<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></code></pre></div>
-<p><img src="vapred_intro_files/figure-html/simple-pred-effect-1.png" width="700"></p>
+<p><img src="varpred_intro_files/figure-html/simple-pred-effect-1.png" width="700"></p>
 <p>The Figure above shows a prediction (-styled) and an effect (-styled) plot. The horizontal line is the mean of the data (mean of <code>mpg</code>) while the vertical one is the mean of the focal predictor (<code>wt</code>) – we call this <em>center point</em>. The wider curves correspond to the conventional prediction curves (prediction-styled plot), while the narrower curves crossing at the center point. For a simple linear model, effect-styled curves cross at the center point. In other words, effects-styled plots provide a way to generate effects indicating uncertainty due only to <em>changes</em> in the focal predictor.</p>
 </div>
 <div class="section level3">
@@ -285,7 +285,7 @@
     <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"Anchor"</span>, linetype<span class="op">=</span><span class="st">"Anchor"</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></code></pre></div>
-<p><img src="vapred_intro_files/figure-html/simple-anchor-1.png" width="700"></p>
+<p><img src="varpred_intro_files/figure-html/simple-anchor-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="observed-value-approach">Observed-value approach<a class="anchor" aria-label="anchor" href="#observed-value-approach"></a>
@@ -304,7 +304,7 @@
     <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"Approach"</span>, linetype<span class="op">=</span><span class="st">"Approach"</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span></code></pre></div>
-<p><img src="vapred_intro_files/figure-html/simple-observed-1.png" width="700"></p>
+<p><img src="varpred_intro_files/figure-html/simple-observed-1.png" width="700"></p>
 <div class="section level4">
 <h4 id="bias-correction">Bias correction<a class="anchor" aria-label="anchor" href="#bias-correction"></a>
 </h4>
@@ -379,7 +379,7 @@
     <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">binned_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y<span class="op">=</span><span class="va">status</span><span class="op">)</span>, colour<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ef</span><span class="op">)</span></code></pre></div>
-<p><img src="vapred_intro_files/figure-html/nonlinear-observed-plot-1.png" width="700"></p>
+<p><img src="varpred_intro_files/figure-html/nonlinear-observed-plot-1.png" width="700"></p>
 <p>The difference in mean-based and observed-value-based is due to the bias induced by the non-focal predictor and the non-linear averaging in the logistic model. The mean-based approach is affected by the non-linear averaging. As a result, the observed-value approach estimates are more aligned to the observed data than the mean-based approach, see previous Figure.</p>
 </div>
 </div>
