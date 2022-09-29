@@ -18,6 +18,8 @@ Sources += $(wildcard *.R R/*.R)
 Sources += $(wildcard man/*.Rd) NAMESPACE DESCRIPTION
 Sources += $(wildcard man/figures/*)
 Sources += $(wildcard docs/*)
+Sources += $(wildcard docs/news/*)
+Sources += $(wildcard docs/reference/*)
 Sources += $(wildcard docs/articles/*)
 
 Ignore += README.html

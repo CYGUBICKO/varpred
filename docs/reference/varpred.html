@@ -24,7 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/vapred_intro.html">Outcome plots</a>
+    <a class="dropdown-item" href="../articles/varpred_intro.html">Outcome plots</a>
   </div>
 </li>
 <li class="nav-item">
@@ -161,7 +161,7 @@
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The central estimates (often called effect or prediction) describe how the fitted model responds to the changes in the focal predictor. The other associated quantities are the prediction and effect estimates:</p><ul><li><p><strong>prediction estimates</strong>: incorporate all the sources of uncertainty in the model. Important if our goal is to do prediction.</p></li>
 <li><p><strong>effect estimates</strong>: incorporate uncertainty due to focal predictor only. Focus on visualizing the <em>effect</em> of the focal predictor.</p></li>
-</ul><p>The default approaches to compute these quantities involves averaging the non-focal linear predictors (columns of <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></code> corresponding to non-focal predictors) -- <em>mean-based</em> approach. An alternative is the <em>observed-value-based</em> approach which computes the estimates over the entire population of the non-focal predictors and then averages them over the levels of the focal predictors. The later approach is more appropriate for a model involving non-linear link function with non-focal predictors and/or random effects. See <code><a href="../articles/vapred_intro.html">vignette("vapred_intro", package="varpred")</a></code>) for more details.</p>
+</ul><p>The default approaches to compute these quantities involves averaging the non-focal linear predictors (columns of <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></code> corresponding to non-focal predictors) -- <em>mean-based</em> approach. An alternative is the <em>observed-value-based</em> approach which computes the estimates over the entire population of the non-focal predictors and then averages them over the levels of the focal predictors. The later approach is more appropriate for a model involving non-linear link function with non-focal predictors and/or random effects. See <code>vignette("vapred_intro", package="varpred")</code>) for more details.</p>
 <p>The current version supports:</p><ul><li><p>lm and glm</p></li>
 <li><p>lme4</p></li>
 <li><p>glmmTMB</p></li>
