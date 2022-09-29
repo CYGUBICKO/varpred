@@ -1,5 +1,7 @@
 ## varpred package re-factor
 
+## https://cygubicko.github.io/varpred/index.html 
+
 current: target
 -include target.mk
 
