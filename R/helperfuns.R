@@ -504,7 +504,9 @@ clean_model <- function(focal.predictors, mod, xlevels
 			# seq(min(X[, name]), max(X[,name]), length=xlevels[[name]])
 			  .x <- unique(xlevels[[name]])
 			} else {
-			  .x <- unique(xlevels[[name]])
+			# 2022 Oct 11 (Tue): We need focal as specified
+			#  .x <- unique(xlevels[[name]])
+			  .x <- xlevels[[name]]
 			}
 		}
 	 } else {
