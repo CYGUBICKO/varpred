@@ -57,7 +57,10 @@ pkgsExport.Rout: R/pkgsExport.R
 
 ######################################################################
 
-install:
+quickstart:
+	R CMD INSTALL .
+
+update:
 	make vignettes/varpred_intro.pdf
 	make update-doc && make build-package && make install-tarball && make README.md
 	make pkg-site
