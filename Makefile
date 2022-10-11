@@ -68,6 +68,9 @@ pkg-site:
 build-package:
 	R CMD build .
 
+quick:
+	R CMD INSTALL .
+
 install-tarball:
 	R CMD INSTALL varpred_1.0.1.*
 
