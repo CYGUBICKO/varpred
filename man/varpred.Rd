@@ -119,7 +119,9 @@ ef_mean <- varpred(mod, "age", steps=steps, bias.adjust="none", modelname="mean-
 ef_observed <- varpred(mod, "age", steps=steps, bias.adjust="observed", modelname="observed-value")
 ## Combine all the effect estimates
 ef <- combinevarpred(list(ef_mean, ef_observed))
-plot(ef)
+print(plot(ef)
+	+ scale_color_brewer(palette = "Dark2")
+)
 
 # Prediction plots
 ## Mean-based
@@ -129,7 +131,9 @@ pred_observed <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="ob
 ## Combine all the prediction estimates
 ### With plotit=TRUE no need to plot
 pred <- combinevarpred(list(pred_mean, pred_observed), plotit=TRUE)
-print(pred)
+print(pred
+	+ scale_color_brewer(palette = "Dark2")
+)
 
 }
 \seealso{

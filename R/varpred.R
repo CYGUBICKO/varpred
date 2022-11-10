@@ -69,7 +69,9 @@
 #' ef_observed <- varpred(mod, "age", steps=steps, bias.adjust="observed", modelname="observed-value")
 #' ## Combine all the effect estimates
 #' ef <- combinevarpred(list(ef_mean, ef_observed))
-#' plot(ef)
+#' print(plot(ef)
+#'		+ scale_color_brewer(palette = "Dark2")
+#'	)
 #'
 #' # Prediction plots
 #' ## Mean-based
@@ -79,7 +81,9 @@
 #' ## Combine all the prediction estimates
 #' ### With plotit=TRUE no need to plot
 #' pred <- combinevarpred(list(pred_mean, pred_observed), plotit=TRUE)
-#' print(pred)
+#' print(pred
+#'		+ scale_color_brewer(palette = "Dark2")
+#' )
 #'
 #' @importFrom stats model.frame model.matrix vcov .getXlevels as.formula coef coefficients delete.response formula qt setNames terms
 #'
