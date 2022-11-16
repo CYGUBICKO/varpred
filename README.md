@@ -78,7 +78,9 @@ We use `mtcars` data to show outcome plots:
 
     ## Prediction
     pred <- varpred(mod, "wt", isolate=FALSE, modelname="prediction")
-    plot(pred)
+    print(plot(pred)
+        + scale_color_brewer(palette = "Dark2")
+    )
 
 ![](man/figures/simple_example-2.png)
 
@@ -91,6 +93,7 @@ We use `mtcars` data to show outcome plots:
     print(p1
         + geom_point(data=mtcars, aes(x=wt, y=mpg), col="grey")
         + labs(colour="Method", linetype="Method")
+        + scale_color_brewer(palette = "Dark2")
     )
 
 ![](man/figures/simple_example-3.png)

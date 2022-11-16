@@ -113,7 +113,9 @@
 <p><img src="reference/figures/simple_example-1.png"></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">## Prediction</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>pred &lt;-<span class="st"> </span><span class="kw">varpred</span>(mod, <span class="st">"wt"</span>, <span class="dt">isolate=</span><span class="ot">FALSE</span>, <span class="dt">modelname=</span><span class="st">"prediction"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">plot</span>(pred)</span></code></pre></div>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">print</span>(<span class="kw">plot</span>(pred)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_brewer</span>(<span class="dt">palette =</span> <span class="st">"Dark2"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>)</span></code></pre></div>
 <p><img src="reference/figures/simple_example-2.png"></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">## Compare effect and prediction</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>all_v &lt;-<span class="st"> </span><span class="kw">combinevarpred</span>(<span class="kw">list</span>(ef, pred))</span>
@@ -123,7 +125,8 @@
 <span id="cb4-6"><a href="#cb4-6"></a><span class="kw">print</span>(p1</span>
 <span id="cb4-7"><a href="#cb4-7"></a>    <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>wt, <span class="dt">y=</span>mpg), <span class="dt">col=</span><span class="st">"grey"</span>)</span>
 <span id="cb4-8"><a href="#cb4-8"></a>    <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">colour=</span><span class="st">"Method"</span>, <span class="dt">linetype=</span><span class="st">"Method"</span>)</span>
-<span id="cb4-9"><a href="#cb4-9"></a>)</span></code></pre></div>
+<span id="cb4-9"><a href="#cb4-9"></a>    <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_brewer</span>(<span class="dt">palette =</span> <span class="st">"Dark2"</span>)</span>
+<span id="cb4-10"><a href="#cb4-10"></a>)</span></code></pre></div>
 <p><img src="reference/figures/simple_example-3.png"></p>
 </div>
 </div>

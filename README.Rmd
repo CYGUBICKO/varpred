@@ -68,7 +68,9 @@ plot(ef)
 
 ## Prediction
 pred <- varpred(mod, "wt", isolate=FALSE, modelname="prediction")
-plot(pred)
+print(plot(pred)
+	+ scale_color_brewer(palette = "Dark2")
+)
 
 ## Compare effect and prediction
 all_v <- combinevarpred(list(ef, pred))
@@ -78,6 +80,7 @@ p1 <- plot(all_v)
 print(p1
 	+ geom_point(data=mtcars, aes(x=wt, y=mpg), col="grey")
 	+ labs(colour="Method", linetype="Method")
+	+ scale_color_brewer(palette = "Dark2")
 )
 ```
 
