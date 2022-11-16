@@ -57,7 +57,7 @@ pkgsExport.Rout: R/pkgsExport.R
 
 ######################################################################
 
-quickstart:
+quickinstall:
 	R CMD INSTALL .
 
 update:
