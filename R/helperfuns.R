@@ -6,6 +6,7 @@ pop.bias.adjust <- function(x.focal, x.excluded, betahat, formula.rhs
 	, mod, vcov., isolate, isolate.value, internal, vareff_objects, x.var
 	, typical, include.re, x.joint) {
 
+	pred <- NULL
 	mm <- get_model.mm(mod)
 	if (!is.null(x.excluded)) {
 		nM <- NROW(x.excluded)

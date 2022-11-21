@@ -10,7 +10,8 @@ prepmod.brmsfit <- function(mod, ...) {
 	check_terms <- attr(mod, "terms")
 	if (is.null(check_terms)) {
 		bform <- formula(mod)
-		bform <- brms:::update_re_terms(bform, re_formula=NA)
+		## 2022 Nov 21 (Mon): namespace issues?
+#		bform <- brms:::update_re_terms(bform, re_formula=NA)
 		bterms <- brms::brmsterms(bform, resp_rhs_all = FALSE)
 		bterms <- attr(model.frame(bterms$allvars, data = mod$data), "terms")
 		mod$terms <- bterms
@@ -69,7 +70,7 @@ check_intercept.default <- function(mod, ...) {
 ## brms
 vareffobj.brmsfit <- function(mod, ...) {
 	out <- list()
-	out$coefficients <- fixef(mod)[,"Estimate"]
+	out$coefficients <- brms::fixef(mod)[,"Estimate"]
 	out$variance_covariance <- vcov(mod)
 	out$formula <- formula(terms(mod)) #as.formula(brms:::update_re_terms(formula(mod), re_formula=NA))
 	out$link <- family(mod)
@@ -94,7 +95,7 @@ get_xlevels.brmsfit <- function(mod) {
 }
 
 check_intercept.brmsfit <- function(mod, ...) {
-	any(grepl("Intercept", names(fixef(mod)[,"Estimate"]), ignore.case=TRUE))
+	any(grepl("Intercept", names(brms::fixef(mod)[,"Estimate"]), ignore.case=TRUE))
 }
 
 
@@ -102,7 +103,7 @@ check_intercept.brmsfit <- function(mod, ...) {
 
 vareffobj.stanreg <- function(mod, ...) {
 	out <- list()
-	out$coefficients <- fixef(mod)
+	out$coefficients <- rstanarm::fixef(mod)
 	out$variance_covariance <- vcov(mod)
 	out$formula <- formula(mod, fixed.only=TRUE)
 	out$link <- family(mod)
@@ -127,7 +128,7 @@ get_xlevels.stanreg <- function(mod) {
 }
 
 check_intercept.stanreg <- function(mod, ...) {
-	any(grepl("Intercept", names(fixef(mod)), ignore.case=TRUE))
+	any(grepl("Intercept", names(rstanarm::fixef(mod)), ignore.case=TRUE))
 }
 
 
@@ -139,18 +140,18 @@ vareffobj.glmmTMB <- function(mod, ...) {
 	out$variance_covariance <- vcov(mod)$cond
 	out$formula <- formula(mod, fixed.only=TRUE)
 	out$link <- family(mod)
-	out$contrasts <- attr(getME(mod, "X"), "contrasts")
+	out$contrasts <- attr(glmmTMB::getME(mod, "X"), "contrasts")
 	class(out) <- "vareffobj"
 	return(out)
 }
 
 get_model.mm.glmmTMB <- function(mod, ...) {
-	mm <- getME(mod,"X")
+	mm <- glmmTMB::getME(mod,"X")
 	return(mm)
 }
 
 get_contrasts.glmmTMB <- function(mod, ...) {
-	attr(getME(mod, "X"), "contrasts")
+	attr(glmmTMB::getME(mod, "X"), "contrasts")
 }
 
 get_xlevels.glmmTMB <- function(mod) {
@@ -159,7 +160,7 @@ get_xlevels.glmmTMB <- function(mod) {
 }
 
 check_intercept.glmmTMB <- function(mod, ...) {
-	any(grepl("Intercept", names(fixef(mod)$cond), ignore.case=TRUE))
+	any(grepl("Intercept", names(glmmTMB::fixef(mod)$cond), ignore.case=TRUE))
 }
 
 ## lme4
@@ -169,18 +170,18 @@ vareffobj.glmerMod <- function(mod, ...) {
 	out$variance_covariance <- vcov(mod)
 	out$formula <- formula(mod, fixed.only=TRUE)
 	out$link <- family(mod)
-	out$contrasts <- attr(getME(mod, "X"), "contrasts")
+	out$contrasts <- attr(lme4::getME(mod, "X"), "contrasts")
 	class(out) <- "vareffobj"
 	return(out)
 }
 
 get_model.mm.glmerMod <- function(mod, ...) {
-	mm <- getME(mod,"X")
+	mm <- lme4::getME(mod,"X")
 	return(mm)
 }
 
 get_contrasts.glmerMod <- function(mod, ...) {
-	attr(getME(mod, "X"), "contrasts")
+	attr(lme4::getME(mod, "X"), "contrasts")
 }
 
 vareffobj.merMod <- function(mod, ...) {
@@ -189,18 +190,18 @@ vareffobj.merMod <- function(mod, ...) {
 	out$variance_covariance <- vcov(mod)
 	out$formula <- formula(mod, fixed.only=TRUE)
 	out$link <- family(mod)
-	out$contrasts <- attr(getME(mod, "X"), "contrasts")
+	out$contrasts <- attr(lme4::getME(mod, "X"), "contrasts")
 	class(out) <- "vareffobj"
 	return(out)
 }
 
 get_model.mm.merMod <- function(mod, ...) {
-	mm <- getME(mod,"X")
+	mm <- lme4::getME(mod,"X")
 	return(mm)
 }
 
 get_contrasts.merMod <- function(mod, ...) {
-	attr(getME(mod, "X"), "contrasts")
+	attr(lme4::getME(mod, "X"), "contrasts")
 }
 
 get_xlevels.glmerMod <- function(mod) {
@@ -214,11 +215,11 @@ get_xlevels.merMod <- function(mod) {
 }
 
 check_intercept.glmerMod <- function(mod, ...) {
-	any(grepl("Intercept", names(fixef(mod)), ignore.case=TRUE))
+	any(grepl("Intercept", names(lme4::fixef(mod)), ignore.case=TRUE))
 }
 
 check_intercept.merMod <- function(mod, ...) {
-	any(grepl("Intercept", names(fixef(mod)), ignore.case=TRUE))
+	any(grepl("Intercept", names(lme4::fixef(mod)), ignore.case=TRUE))
 }
 
 ## Statistics
@@ -266,7 +267,7 @@ get_sigma.default <- function(mod, ...) {
 }
 
 get_sigma.stanreg <- function(mod, ...) {
-	rand_comp <- VarCorr(mod)
+	rand_comp <- rstanarm::VarCorr(mod)
 	sigma <- unlist(lapply(names(rand_comp), function(x)attr(rand_comp[[x]], "stddev")))
 	total_sd <- sqrt(sum(sigma^2))
 	total_sd
@@ -307,36 +308,36 @@ includeRE.glmmTMB <- function(mod, ...) {
 #	ran_eff <- ran_eff[, "condval", drop=FALSE]
 	ran_eff <- mod$obj$env$last.par.best
 	ran_eff <- ran_eff[names(ran_eff)=="b"]
-	re <- as.vector(getME(mod, "Z") %*% ran_eff)
+	re <- as.vector(glmmTMB::getME(mod, "Z") %*% ran_eff)
 	return(re)	
 }
 
 includeRE.merMod <- function(mod, ...){
 #	ran_eff <- as.data.frame(ranef(mod))
 #	ran_eff <- ran_eff[, "condval", drop=FALSE]
-	ran_eff <- getME(mod, "b") 
-	re <- as.vector(getME(mod, "Z") %*% as.matrix(ran_eff))
+	ran_eff <- lme4::getME(mod, "b") 
+	re <- as.vector(lme4::getME(mod, "Z") %*% as.matrix(ran_eff))
 	return(re)	
 }
 		
 includeRE.glmerMod <- function(mod, ...){
 	# getME(mod, "b")
 #	ran_eff <- as.data.frame(ranef(mod))
-	ran_eff <- getME(mod, "b") #ran_eff[, "condval", drop=FALSE]
-	re <- as.vector(getME(mod, "Z") %*% as.matrix(ran_eff))
+	ran_eff <- lme4::getME(mod, "b") #ran_eff[, "condval", drop=FALSE]
+	re <- as.vector(lme4::getME(mod, "Z") %*% as.matrix(ran_eff))
 	return(re)	
 }
 
 includeRE.stanreg <- function(mod, ...){
-	ran_eff <- as.data.frame(ranef(mod))
+	ran_eff <- as.data.frame(rstanarm::ranef(mod))
 	ran_eff <- ran_eff[, "condval", drop=FALSE]
-	re <- as.vector(rstanarm:::get_z(mod) %*% as.matrix(ran_eff))
+	re <- as.vector(rstanarm::get_z(mod) %*% as.matrix(ran_eff))
 	return(re)	
 }
 
 includeRE.brmsfit <- function(mod, ...){
-	Z <- prepare_predictions(mod, ...)$dpars$mu$re$Z
-	ran_eff <- ranef(mod)
+	Z <- brms::prepare_predictions(mod, ...)$dpars$mu$re$Z
+	ran_eff <- brms::ranef(mod)
 	out <- sapply(names(ran_eff), function(x){
 		z <- Z[[x]]
 		reff <- as.data.frame(ran_eff[[x]])

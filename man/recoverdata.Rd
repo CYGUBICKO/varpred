@@ -9,11 +9,11 @@ recoverdata(mod, extras = NULL, envir = environment(formula(mod)), ...)
 \arguments{
 \item{mod}{fitted model}
 
+\item{extras}{character vector or formula specifying the predictors. Important when the transformation are applied in the formula.}
+
 \item{envir}{data environment}
 
 \item{...}{for future implementations}
-
-\item{optional}{character vector or formula specifying the predictors. Important when the transformation are applied in the formula.}
 }
 \value{
 a dataframe

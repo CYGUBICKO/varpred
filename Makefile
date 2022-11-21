@@ -21,6 +21,7 @@ Sources += $(wildcard docs/*)
 Sources += $(wildcard docs/news/*)
 Sources += $(wildcard docs/reference/*)
 Sources += $(wildcard docs/articles/*)
+Sources += .Rbuildignore
 
 Ignore += README.html
 Ignore += *.md.args
@@ -57,19 +58,22 @@ pkgsExport.Rout: R/pkgsExport.R
 
 ######################################################################
 
+## install required packages for vignettes 
+
 quickinstall:
 	R CMD INSTALL .
+	make install-tarball
 
 update:
 	make vignettes/varpred_intro.pdf
-	make update-doc && make build-package && make install-tarball && make README.md
+	make install && make README.md
 	make pkg-site
+
+install:
+	make update-doc && make check-package && make quickinstall
 
 pkg-site:
 	echo "pkgdown::build_site()" | R --slave
-
-build-package:
-	R CMD build .
 
 install-tarball:
 	R CMD INSTALL varpred_1.0.1.*

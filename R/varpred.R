@@ -43,6 +43,7 @@
 #'
 #' @examples
 #' # Set theme for ggplot. Comment out if not needed
+#' library(ggplot2)
 #' varpredtheme()
 #' set.seed(911)
 #' # Simulate binary outcome data with two predictors
@@ -75,9 +76,15 @@
 #'
 #' # Prediction plots
 #' ## Mean-based
-#' pred_mean <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="none", modelname="mean-based")
+#' pred_mean <- varpred(mod, "age", isolate=FALSE
+#'		, steps=steps, bias.adjust="none"
+#'		, modelname="mean-based"
+#' )
 #' ## Observed-value-based
-#' pred_observed <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="observed", modelname="observed-value")
+#' pred_observed <- varpred(mod, "age", isolate=FALSE
+#' 	, steps=steps, bias.adjust="observed"
+#' 	, modelname="observed-value"
+#' )
 #' ## Combine all the prediction estimates
 #' ### With plotit=TRUE no need to plot
 #' pred <- combinevarpred(list(pred_mean, pred_observed), plotit=TRUE)
@@ -85,7 +92,7 @@
 #'		+ scale_color_brewer(palette = "Dark2")
 #' )
 #'
-#' @importFrom stats model.frame model.matrix vcov .getXlevels as.formula coef coefficients delete.response formula qt setNames terms
+#' @importFrom stats model.frame model.matrix vcov .getXlevels as.formula coef coefficients delete.response formula qt setNames terms aggregate dnorm drop.terms family getCall integrate model.offset plogis qnorm quantile
 #'
 #'
 #' @export
@@ -398,15 +405,15 @@ varpred <- function(mod
 #' print(zero_vcov(m1, "x"))
 #'
 #' @export
-zero_vcov <- function(m, focal_vars, complete) {
-	if (is.matrix(m)|is.data.frame(m)) {
-		v <- m
+zero_vcov <- function(mod, focal_vars, complete) {
+	if (is.matrix(mod)|is.data.frame(mod)) {
+		v <- mod
 	} else {
-		assign <- get_vnames(m)$vnames
+		assign <- get_vnames(mod)$vnames
 		check_vars <-  grepl(paste0(focal_vars, collapse="|"), assign) # assign %in% focal_vars
 		if (!any(check_vars)) stop(paste0(focal_vars, " not in the model formula"))
 		focal_vars <- names(assign)[check_vars]
-		v <- vareffobj(m)$variance_covariance
+		v <- vareffobj(mod)$variance_covariance
 	}
 	focal_var <- v[focal_vars,focal_vars]
 	v[] <- 0 ## set all to zero, preserving dims/names
@@ -419,7 +426,7 @@ zero_vcov <- function(m, focal_vars, complete) {
 #' Reconstructs data from the fitted model or the environment. 
 #'
 #' @param mod fitted model
-#' @param optional character vector or formula specifying the predictors. Important when the transformation are applied in the formula. 
+#' @param extras character vector or formula specifying the predictors. Important when the transformation are applied in the formula. 
 #' @param envir data environment 
 #' @param ... for future implementations
 #'
@@ -491,6 +498,7 @@ recoverdata <- function(mod, extras = NULL, envir = environment(formula(mod)), .
 #'
 
 combinevarpred <- function(vlist, lnames=NULL, plotit=FALSE, addmarginals=FALSE, margindex, ...) {
+	muy <- model <- NULL
 	if (!is.list(vlist))stop("vlist should be a list of objects of class varpred")
 	nobjs <- length(vlist)
 	if (!is.null(lnames)) {

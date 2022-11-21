@@ -51,21 +51,21 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">zero_vcov</span><span class="op">(</span><span class="va">m</span>, <span class="va">focal_vars</span>, <span class="va">complete</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">zero_vcov</span><span class="op">(</span><span class="va">mod</span>, <span class="va">focal_vars</span>, <span class="va">complete</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>focal_vars</dt>
+    <dl><dt>mod</dt>
+<dd><p>fitted model object or a full variance-covariance matrix with terms appearing the same way they appear in the coefficients.</p></dd>
+
+
+<dt>focal_vars</dt>
 <dd><p>a character vector specifying the variable(s) appearing on the right side of the formula of the fitted model. The entries of this variable with be non-zero.</p></dd>
 
 
 <dt>complete</dt>
 <dd><p>logical indicating if the full variance-covariance matrix should be returned.</p></dd>
-
-
-<dt>mod</dt>
-<dd><p>fitted model object or a full variance-covariance matrix with terms appearing the same way they appear in the coefficients.</p></dd>
 
 </dl></div>
     <div class="section level2">

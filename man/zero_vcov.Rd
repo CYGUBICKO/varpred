@@ -4,14 +4,14 @@
 \alias{zero_vcov}
 \title{Zero-out entries of non-focal entries of variance-covariance matrix.}
 \usage{
-zero_vcov(m, focal_vars, complete)
+zero_vcov(mod, focal_vars, complete)
 }
 \arguments{
+\item{mod}{fitted model object or a full variance-covariance matrix with terms appearing the same way they appear in the coefficients.}
+
 \item{focal_vars}{a character vector specifying the variable(s) appearing on the right side of the formula of the fitted model. The entries of this variable with be non-zero.}
 
 \item{complete}{logical indicating if the full variance-covariance matrix should be returned.}
-
-\item{mod}{fitted model object or a full variance-covariance matrix with terms appearing the same way they appear in the coefficients.}
 }
 \value{
 a variance-covariance matrix of the estimated parameters with non-zero entry corresponding to the focal variable.
