@@ -8,7 +8,6 @@ current: target
 vim_session:
 	bash -cl "vmt"
 
-
 ######################################################################
 
 Sources += $(wildcard *.md .*.yml)
