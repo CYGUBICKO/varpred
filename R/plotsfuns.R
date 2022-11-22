@@ -50,7 +50,7 @@
 
 plot.varpred <- function(x, ..., xlabs = NULL, ylabs = NULL, xtrans_fun=NULL, pos = 0.5, ci = TRUE, facet_scales = "fixed", facet_ncol = NULL){
 
-	lwr <- upr <- NULL
+	lwr <- upr <- model <- NULL
 	df <- x$preds
 	if (is.null(df)) df <- x
 	focal <- attr(df, "focal")
@@ -143,6 +143,8 @@ plot.varpred <- function(x, ..., xlabs = NULL, ylabs = NULL, xtrans_fun=NULL, po
 #' Customized theme for varpred plots
 #'
 #' Sets a theme for varpred and other ggplot objects
+#'
+#' @param type a character string. If \code{minimal} simple theme is applied, otherwise \code{complete}.
 #'
 #' @examples
 #' library(ggplot2)

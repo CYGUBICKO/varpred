@@ -4,3 +4,12 @@ makestuff/*
 ^docs$
 ^pkgdown$
 ^\.travis\.yml$
+.*\.md
+Makefile
+^\.pdf
+.*\.tar.gz
+README*\.*
+commit\.time
+.*\.mk
+.*\.time
+.*\.log

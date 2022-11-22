@@ -6,6 +6,9 @@
 \usage{
 varpredtheme(type = c("minimal", "complete"))
 }
+\arguments{
+\item{type}{a character string. If \code{minimal} simple theme is applied, otherwise \code{complete}.}
+}
 \description{
 Sets a theme for varpred and other ggplot objects
 }

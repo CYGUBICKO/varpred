@@ -20,9 +20,18 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
-Imports: ggplot2, lme4
+RoxygenNote: 7.2.2
+Imports: ggplot2
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+	 devtools,
+	 pkgdown,
+	 emmeans,
+	 effects,
+	 brms,
+	 rstanarm,
+	 lme4,
+	 glmmTMB,
+	 dplyr
 VignetteBuilder: knitr

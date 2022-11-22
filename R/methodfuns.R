@@ -51,9 +51,9 @@ data.frame.varpred <- function(x, ...) {
 #' @param x varpred object.
 #' @param ... additional aurguments passed to head.
 #'
-#' @export
+#' @importFrom utils head
 #' @method head varpred
-#' @export head.varpred
+#' @export 
 
 head.varpred <- function(x, ...) {
 	df <- as.data.frame(x)
@@ -65,9 +65,9 @@ head.varpred <- function(x, ...) {
 #' @param x varpred object.
 #' @param ... additional aurguments passed to tail.
 #'
-#' @export
+#' @importFrom utils tail
 #' @method tail varpred
-#' @export tail.varpred
+#' @export
 
 tail.varpred <- function(x, ...) {
 	df <- as.data.frame(x)
@@ -111,6 +111,14 @@ get_model.mm <- function(mod, ...)UseMethod("get_model.mm")
 #' @keywords internal
 prepmod <- function(mod, ...)UseMethod("prepmod")
 
+#' Varpred means
 #'
+#' Compute the mean of central estimates or the focal predictor
+#'
+#' @details
+#'
+#' Provides a quick way to compare observed data marginal means with that of the central estimate. Current version ignores interactions and averages the \code{fit} column only. 
+#'
+#' @inheritParams getmeans.varpred
 #' @export
 getmeans <- function(object, what=c("both", "estimate", "focal"), focal=NULL, modelname=NULL)UseMethod("getmeans")

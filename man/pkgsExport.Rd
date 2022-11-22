@@ -2,11 +2,7 @@
 % Please edit documentation in R/pkgsExport.R
 \name{pkgsExport}
 \alias{pkgsExport}
-\alias{fixef}
 \title{Import and export various functions from various packages}
 \description{
 Import and export various functions from various packages
-
-Import and export fixef. See \code{\link[lme4]{fixef}}
 }
-\keyword{internal}

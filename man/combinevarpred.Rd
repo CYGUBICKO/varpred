@@ -34,6 +34,7 @@ Combines and plots comparison plots for more than two named varpred objects.
 }
 \examples{
 # Set theme for ggplot. Comment out if not needed
+library(ggplot2)
 varpredtheme()
 set.seed(911)
 # Simulate binary outcome data with two predictors
@@ -66,9 +67,15 @@ print(plot(ef)
 
 # Prediction plots
 ## Mean-based
-pred_mean <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="none", modelname="mean-based")
+pred_mean <- varpred(mod, "age", isolate=FALSE
+	, steps=steps, bias.adjust="none"
+	, modelname="mean-based"
+)
 ## Observed-value-based
-pred_observed <- varpred(mod, "age", isolate=FALSE, steps=steps, bias.adjust="observed", modelname="observed-value")
+pred_observed <- varpred(mod, "age", isolate=FALSE
+	, steps=steps, bias.adjust="observed"
+	, modelname="observed-value"
+)
 ## Combine all the prediction estimates
 ### With plotit=TRUE no need to plot
 pred <- combinevarpred(list(pred_mean, pred_observed), plotit=TRUE)
