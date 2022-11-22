@@ -11,5 +11,5 @@ Makefile
 README*\.*
 commit\.time
 .*\.mk
-up*\.time
-go*\.log
+.*\.time
+.*\.log
