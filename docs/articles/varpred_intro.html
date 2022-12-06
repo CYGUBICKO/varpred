@@ -229,6 +229,30 @@
 <p><img src="varpred_intro_files/figure-html/simple-mean-based-combine-1.png" width="700"></p>
 <p>In the absence of interaction (left Figure), the three packages produce identical estimates and their respective averages closely match the data mean. However, in the presence of interactions, the estimates from <code>emmeans</code> and <code>effects</code> are identical but differ from <code>varpred</code>’s, which is very close to the data mean.</p>
 <p>The packages <code>emmeans</code> and <code>effects</code> use the average of the input variables (mean of <code>disp</code> and <code>hp</code>) as the reference point as opposed to model-center approach <code>varpred</code> (average of the linear predictor variables). In the simple model (left Figure above) input variables are the same as the linear predictor variables, so all the three methods produce identical results. In the interaction model (right Figure above), there is an additional linear predictor variable (<code>disp*hp</code>). <code>emmeans</code> and <code>effects</code> first average the input variables to compute <span class="math inline">\(\mathrm{\bar{disp}}\star\mathrm{\bar{hp}}\)</span> while <code>varpred</code> first calculates the corresponding vector of linear predictor values and then averages.</p>
+<p><strong>emmeans-based averaging with varpred (Experimental!)</strong></p>
+<p>We can also average input variables in <code>varpred</code> similar to <code>emmeans</code> and <code>effects</code>. Consider <code>mod2</code> in the previous example, by setting <code>emmeans_centered=TRUE</code>, we can generate predictions similar to the ones in <code>em2</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## default varpred centering</span>
+<span class="va">vcenter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod2</span>
+    , <span class="st">"wt"</span>
+    , modelname<span class="op">=</span><span class="st">"vpred center"</span>
+<span class="op">)</span>
+
+<span class="co">## varpred emmeans centering</span>
+<span class="va">emcenter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod2</span>
+    , <span class="st">"wt"</span>
+    , emmeans_centered<span class="op">=</span><span class="cn">TRUE</span>
+    , modelname<span class="op">=</span><span class="st">"em center"</span>
+<span class="op">)</span>
+
+<span class="va">all_preds_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combinevarpred.html">combinevarpred</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">vcenter</span>, <span class="va">emcenter</span><span class="op">)</span>
+    , plot<span class="op">=</span><span class="cn">TRUE</span>
+    , ci<span class="op">=</span><span class="cn">FALSE</span>
+<span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">all_preds_plots</span>
+    <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<p><img src="varpred_intro_files/figure-html/varpred-emmeans-centered-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="prediction-and-effect-plots">Prediction and effect plots<a class="anchor" aria-label="anchor" href="#prediction-and-effect-plots"></a>
@@ -236,7 +260,7 @@
 <p>The major distinction between the two lies on how we describe the uncertainty around the central estimates (trend lines in the previous Figures). The prediction plot captures all the sources of uncertainty, including that of intercept, non-focal predictors and random effects. On the other hand, effect plot takes into account the uncertainty associated with the focal predictor only. This way, we expect an effect plot to have narrower confidence intervals (CIs) then a prediction plot.</p>
 <p>It is not easy to generate effect plots in <code>emmeans</code> and <code>effects</code>. A possible way to achieve this in <code>emmeans</code> and <code>effects</code> is to use a zeroed-out (see <code><a href="../reference/zero_vcov.html">varpred::zero_vcov</a></code>) covariance matrix, but this only works when the input variables are centered prior to model fitting, in case of numerical variables, and more complicated when the input variables are categorical.</p>
 <p>In <code>varpred</code>, to generate effect plot, we set <code>isolate=TRUE</code> (default), otherwise (<code>isolate=FALSE</code>) prediction plot. We consider <code>vpred1</code> generated above, which is an effect plot, and now generate a prediction for the same model (<code>mod1</code>).</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## prediction-styled plot: set isolate=FALSE</span>
 <span class="va">vpred1_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span>mod<span class="op">=</span><span class="va">mod1</span>
     , focal_predictors<span class="op">=</span><span class="st">"wt"</span>
@@ -263,7 +287,7 @@
 </h3>
 <p>To generate an effect-styled plot, we need a value of the focal predictor to compute CIs. We call this an <em>anchor</em>. The anchor choice does not affect the central estimate, nor prediction-style plot. The default value is the center point of the linear predictor variables corresponding to the focal predictor. For example, in the previous Figure, mean of <code>wt</code> is used as the default choice.</p>
 <p>This is particularly important when we want to show an effect at a particular value of the focal predictor other than its mean (center point). For example, at <span class="math inline">\(0\)</span>, minimum of the focal predictor, etc. To implement this in <strong>varpred</strong>, set the anchor value using <code>isolate.value</code> and <code>isolate</code> must be <code>TRUE</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Min of wt</span>
 <span class="va">anchor0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod1</span>
     , <span class="st">"wt"</span>
@@ -292,7 +316,7 @@
 </h3>
 <p>For a linear model, the averaging is done on the linear scale, i.e., linear averaging. As a result, the model-center estimates (made using the mean-based approach) are unbiased. However, in a model with non-linear link function, this is not usually true. When averaging is done on a separate link scale, the mean of the estimates is not the same as the estimate at the mean point. This leads to bias: in this case a systematic difference between the values seen on average for a given value of the focal predictor and the value predicted by the mean-based approach. An alternative to the mean-based reference point is the <em>observed-value-based</em> approach, which involves computing the prediction over the population of non-focal predictors and then averaging across the values of the focal predictor.</p>
 <p>To implement <code>observed-value-based</code> in <strong>varpred</strong>, we set <code>bias.adjust="observed"</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## mean-based: set bias.adjust="none"</span>
 <span class="va">vpred_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod1</span>, <span class="st">"wt"</span>, bias.adjust<span class="op">=</span><span class="st">"none"</span>, modelname<span class="op">=</span><span class="st">"mean-based"</span><span class="op">)</span>
 
@@ -309,7 +333,7 @@
 <h4 id="bias-correction">Bias correction<a class="anchor" aria-label="anchor" href="#bias-correction"></a>
 </h4>
 <p>In a simple linear model, such as <code>mod1</code>, all the averaging is done on the linear scale, hence there is not effect of non-linear averaging. Consequently, the estimates are similar, as shown in the previous Figure. However, in a model with non-linear link function such as generalized models, this is not usually true. To demonstrate this, we simulate a binary outcome with two predictors as shown below.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">911</span><span class="op">)</span>
 <span class="co"># Simulate binary outcome data with two predictors</span>
 <span class="va">steps</span> <span class="op">&lt;-</span> <span class="fl">500</span>
@@ -334,7 +358,7 @@
 <span class="co">## Observed-value-based</span>
 <span class="va">ef_observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"age"</span>, steps<span class="op">=</span><span class="va">steps</span>, bias.adjust<span class="op">=</span><span class="st">"observed"</span>, modelname<span class="op">=</span><span class="st">"observed-value"</span><span class="op">)</span></code></pre></div>
 <p>We write a simple function to add binned observations, i.e., proportion of observed outcomes falling within particular bin:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Generate binned observations</span>
 <span class="co">### mod: data.frame or mod object (df preferable)</span>
 <span class="va">binfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mod</span>, <span class="va">focal</span>, <span class="va">bins</span><span class="op">=</span><span class="fl">50</span>, <span class="va">groups</span><span class="op">=</span><span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
@@ -372,7 +396,7 @@
 <span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     5   1     16.7   15.1 binned</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     6   0.9   16.8   15.0 binned</span></code></pre></div>
 <p>We combine the <code>varpred</code> objects and add the observed values (binned).</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Combine all the effect estimates</span>
 <span class="va">ef</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ef_mean</span>, <span class="va">ef_observed</span><span class="op">)</span>
     |&gt; <span class="fu"><a href="../reference/combinevarpred.html">combinevarpred</a></span><span class="op">(</span>plotit<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>

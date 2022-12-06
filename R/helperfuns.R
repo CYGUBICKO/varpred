@@ -381,7 +381,7 @@ matrix.to.df <- function(matrix, colclasses){
 
 clean_model <- function(focal.predictors, mod, xlevels
 	, default.levels, formula.rhs, steps, x.var, typical
-	, vnames, bias.adjust, isolate.value){
+	, vnames, bias.adjust, isolate.value, emmeans_centered){
   
   ## FIXME: How to assign NA to a lme4 object 
   if (!isS4(mod)) {
@@ -432,14 +432,17 @@ clean_model <- function(focal.predictors, mod, xlevels
 		factor.cols[grep(paste("^[aA-zZ]+\\(", name, sep=""), cnames)] <- TRUE
 	 } 
   }
-# factor.cols[grep(":", cnames)] <- FALSE   
 
-## FIXME: For compatibility with emmeans. Otherwise uncomment above block and comment the block below
-#  for (name in all.predictors){
-#    if (check_factor(name, mod)) {
-#      factor.cols[names(grep(name, vnames, value=TRUE))] <- TRUE
-#    }
-#  }
+
+if (emmeans_centered) {
+ 	factor.cols[grep(":", cnames)] <- FALSE   
+	## FIXME: For compatibility with emmeans. Otherwise uncomment above block and comment the block below
+	  for (name in all.predictors){
+	    if (check_factor(name, mod)) {
+	      factor.cols[names(grep(name, vnames, value=TRUE))] <- TRUE
+	    }
+	  }
+}
 
 #  if (handle.inter=="effects") {
 #     factor.cols[grep(":", cnames)] <- FALSE 

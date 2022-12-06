@@ -179,6 +179,33 @@ In the absence of interaction (left Figure), the three packages produce identica
 
 The packages `emmeans` and `effects` use the average of the input variables (mean of `disp` and `hp`) as the reference point as opposed to model-center approach `varpred` (average of the linear predictor variables). In the simple model (left Figure above) input variables are the same as the linear predictor variables, so all the three methods produce identical results. In the interaction model (right Figure above), there is an additional linear predictor variable (`disp*hp`). `emmeans` and `effects` first average the input variables to compute $\mathrm{\bar{disp}}\star\mathrm{\bar{hp}}$ while `varpred` first calculates the corresponding vector of linear predictor values and then averages.
 
+**emmeans-based averaging with varpred (Experimental!)**
+
+We can also average input variables in `varpred` similar to `emmeans` and `effects`. Consider `mod2` in the previous example, by setting `emmeans_centered=TRUE`, we can generate predictions similar to the ones in `em2`. 
+
+```{r varpred-emmeans-centered}
+## default varpred centering
+vcenter <- varpred(mod2
+	, "wt"
+	, modelname="vpred center"
+)
+
+## varpred emmeans centering
+emcenter <- varpred(mod2
+	, "wt"
+	, emmeans_centered=TRUE
+	, modelname="em center"
+)
+
+all_preds_plots <- combinevarpred(list(vcenter, emcenter)
+	, plot=TRUE
+	, ci=FALSE
+)
+print(all_preds_plots
+	+ scale_color_brewer(palette = "Dark2")
+)
+```
+
 
 ## Prediction and effect plots
 

@@ -19,6 +19,7 @@ varpred(
   true.beta = NULL,
   vcov. = NULL,
   internal = FALSE,
+  emmeans_centered = FALSE,
   avefun = mean,
   offset = NULL,
   bias.adjust = c("none", "taylor", "observed"),
@@ -54,6 +55,8 @@ varpred(
 \item{vcov.}{a function or a matrix. If a function, it is used to compute the variance-covariance matrix of the model coefficients. The function should take the model as it's first (or maybe only) argument. A matrix of variance-covariance matrix of the estimated coefficient can also be used. Otherwise \code{vcov(mod)} is used internally. Customized \code{vcov.} can be used to generate effect estimates if the columns corresponding to the non-focal predictors are all zero. However, with this approach, the predictors should be properly scaled. See examples.}
 
 \item{internal}{logical. If \code{TRUE}, the entries of the non-focal predictor (see x.var) in the variance-covariance matrix are internally zeroed-out using \code{\link[varpred]{zero_vcov}}. Default is \code{FALSE}.}
+
+\item{emmeans_centered}{logical. If \code{TRUE}, package \code{emmeans} based input variable centering is applied. See examples in vignette.}
 
 \item{avefun}{the averaging scheme (function) to be used in generating reference point for non-focal predictors. Default is \code{mean}.}
 

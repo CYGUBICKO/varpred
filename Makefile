@@ -60,7 +60,7 @@ pkgsExport.Rout: R/pkgsExport.R
 ## install required packages for vignettes 
 
 quickinstall:
-	R CMD INSTALL .
+	R CMD build .
 	make install-tarball
 
 update:
