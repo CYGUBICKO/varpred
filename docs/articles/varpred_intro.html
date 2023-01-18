@@ -229,20 +229,20 @@
 <p><img src="varpred_intro_files/figure-html/simple-mean-based-combine-1.png" width="700"></p>
 <p>In the absence of interaction (left Figure), the three packages produce identical estimates and their respective averages closely match the data mean. However, in the presence of interactions, the estimates from <code>emmeans</code> and <code>effects</code> are identical but differ from <code>varpred</code>’s, which is very close to the data mean.</p>
 <p>The packages <code>emmeans</code> and <code>effects</code> use the average of the input variables (mean of <code>disp</code> and <code>hp</code>) as the reference point as opposed to model-center approach <code>varpred</code> (average of the linear predictor variables). In the simple model (left Figure above) input variables are the same as the linear predictor variables, so all the three methods produce identical results. In the interaction model (right Figure above), there is an additional linear predictor variable (<code>disp*hp</code>). <code>emmeans</code> and <code>effects</code> first average the input variables to compute <span class="math inline">\(\mathrm{\bar{disp}}\star\mathrm{\bar{hp}}\)</span> while <code>varpred</code> first calculates the corresponding vector of linear predictor values and then averages.</p>
-<p><strong>emmeans-based averaging with varpred (Experimental!)</strong></p>
-<p>We can also average input variables in <code>varpred</code> similar to <code>emmeans</code> and <code>effects</code>. Consider <code>mod2</code> in the previous example, by setting <code>emmeans_centered=TRUE</code>, we can generate predictions similar to the ones in <code>em2</code>.</p>
+<p><strong>Input variable (emmeans-based) averaging with varpred (Experimental!)</strong></p>
+<p>We can also average input variables in <code>varpred</code> similar to <code>emmeans</code> and <code>effects</code> (input variable). Consider <code>mod2</code> in the previous example, by setting <code>input_vars=TRUE</code>, we can generate predictions similar to the ones in <code>em2</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## default varpred centering</span>
 <span class="va">vcenter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod2</span>
     , <span class="st">"wt"</span>
-    , modelname<span class="op">=</span><span class="st">"vpred center"</span>
+    , modelname<span class="op">=</span><span class="st">"model center"</span>
 <span class="op">)</span>
 
 <span class="co">## varpred emmeans centering</span>
 <span class="va">emcenter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod2</span>
     , <span class="st">"wt"</span>
-    , emmeans_centered<span class="op">=</span><span class="cn">TRUE</span>
-    , modelname<span class="op">=</span><span class="st">"em center"</span>
+    , input_vars<span class="op">=</span><span class="cn">TRUE</span>
+    , modelname<span class="op">=</span><span class="st">"input variables"</span>
 <span class="op">)</span>
 
 <span class="va">all_preds_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combinevarpred.html">combinevarpred</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">vcenter</span>, <span class="va">emcenter</span><span class="op">)</span>

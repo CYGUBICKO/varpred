@@ -65,7 +65,7 @@
   true.beta <span class="op">=</span> <span class="cn">NULL</span>,
   vcov. <span class="op">=</span> <span class="cn">NULL</span>,
   internal <span class="op">=</span> <span class="cn">FALSE</span>,
-  emmeans_centered <span class="op">=</span> <span class="cn">FALSE</span>,
+  input_vars <span class="op">=</span> <span class="cn">FALSE</span>,
   avefun <span class="op">=</span> <span class="va">mean</span>,
   offset <span class="op">=</span> <span class="cn">NULL</span>,
   bias.adjust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"taylor"</span>, <span class="st">"observed"</span><span class="op">)</span>,
@@ -130,8 +130,8 @@
 <dd><p>logical. If <code>TRUE</code>, the entries of the non-focal predictor (see x.var) in the variance-covariance matrix are internally zeroed-out using <code><a href="zero_vcov.html">zero_vcov</a></code>. Default is <code>FALSE</code>.</p></dd>
 
 
-<dt>emmeans_centered</dt>
-<dd><p>logical. If <code>TRUE</code>, package <code>emmeans</code> based input variable centering is applied. See examples in vignette.</p></dd>
+<dt>input_vars</dt>
+<dd><p>logical. If <code>TRUE</code>, package input variables are averaged otherwise linear predictor variables. See examples in vignette.</p></dd>
 
 
 <dt>avefun</dt>
