@@ -381,7 +381,7 @@ matrix.to.df <- function(matrix, colclasses){
 
 clean_model <- function(focal.predictors, mod, xlevels
 	, default.levels, formula.rhs, steps, x.var, typical
-	, vnames, bias.adjust, isolate.value, emmeans_centered){
+	, vnames, bias.adjust, isolate.value, input_vars){
   
   ## FIXME: How to assign NA to a lme4 object 
   if (!isS4(mod)) {
@@ -434,7 +434,7 @@ clean_model <- function(focal.predictors, mod, xlevels
   }
 
 
-if (emmeans_centered) {
+if (input_vars) {
  	factor.cols[grep(":", cnames)] <- FALSE   
 	## FIXME: For compatibility with emmeans. Otherwise uncomment above block and comment the block below
 	  for (name in all.predictors){

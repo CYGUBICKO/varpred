@@ -30,7 +30,7 @@
 #' @param true.beta default \code{NULL}. If specified, used as model coefficient estimates and should be in the same order as the vector of coefficients from the model object. Useful when comparing model estimates to the "truth" (simulation values).
 #' @param vcov. a function or a matrix. If a function, it is used to compute the variance-covariance matrix of the model coefficients. The function should take the model as it's first (or maybe only) argument. A matrix of variance-covariance matrix of the estimated coefficient can also be used. Otherwise \code{vcov(mod)} is used internally. Customized \code{vcov.} can be used to generate effect estimates if the columns corresponding to the non-focal predictors are all zero. However, with this approach, the predictors should be properly scaled. See examples.
 #' @param internal logical. If \code{TRUE}, the entries of the non-focal predictor (see x.var) in the variance-covariance matrix are internally zeroed-out using \code{\link[varpred]{zero_vcov}}. Default is \code{FALSE}.
-#' @param emmeans_centered logical. If \code{TRUE}, package \code{emmeans} based input variable centering is applied. See examples in vignette.
+#' @param input_vars logical. If \code{TRUE}, package input variables are averaged otherwise linear predictor variables. See examples in vignette.
 #' @param avefun the averaging scheme (function) to be used in generating reference point for non-focal predictors. Default is \code{mean}.
 #' @param offset a function or a value.
 #' @param bias.adjust specifies the bias correction method. If "none" (default), no bias correction method is applied; if "taylor", second-order Taylor approximation is used; if "observed", all the values of non-focal predictors are used. See details and examples.
@@ -115,7 +115,7 @@ varpred <- function(mod
 	, true.beta=NULL
 	, vcov. = NULL
 	, internal = FALSE
-	, emmeans_centered=FALSE
+	, input_vars=FALSE
 	, avefun = mean
 	, offset = NULL
 	, bias.adjust = c("none", "taylor", "observed")
@@ -189,7 +189,7 @@ varpred <- function(mod
 		, vnames=vnames
 		, bias.adjust = bias.adjust
 		, isolate.value=isolate.value
-		, emmeans_centered=emmeans_centered
+		, input_vars=input_vars
 	)
 
 	formula.rhs <- formula(vareff_objects)[c(1,3)]

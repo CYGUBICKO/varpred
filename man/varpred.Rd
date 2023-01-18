@@ -19,7 +19,7 @@ varpred(
   true.beta = NULL,
   vcov. = NULL,
   internal = FALSE,
-  emmeans_centered = FALSE,
+  input_vars = FALSE,
   avefun = mean,
   offset = NULL,
   bias.adjust = c("none", "taylor", "observed"),
@@ -56,7 +56,7 @@ varpred(
 
 \item{internal}{logical. If \code{TRUE}, the entries of the non-focal predictor (see x.var) in the variance-covariance matrix are internally zeroed-out using \code{\link[varpred]{zero_vcov}}. Default is \code{FALSE}.}
 
-\item{emmeans_centered}{logical. If \code{TRUE}, package \code{emmeans} based input variable centering is applied. See examples in vignette.}
+\item{input_vars}{logical. If \code{TRUE}, package input variables are averaged otherwise linear predictor variables. See examples in vignette.}
 
 \item{avefun}{the averaging scheme (function) to be used in generating reference point for non-focal predictors. Default is \code{mean}.}
 
