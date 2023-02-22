@@ -257,14 +257,14 @@ varpred <- function(mod
 		)
 		off <- get_offset(offset, mf)
 		
-		if (!input_vars) {
+		## if (!input_vars) {
 			## Start: 2023 Feb 09 (Thu): Focal interactions
-			center_mean <- colMeans(X.mod)
-			mm <- sweep(mm, 2, col_mean, FUN="/")
-			mm <- sweep(mm, 2, center_mean, FUN="*")
-			col_mean <- apply(mm, 2, typical)
+			## center_mean <- colMeans(X.mod)
+			## mm <- sweep(mm, 2, col_mean, FUN="/")
+			## mm <- sweep(mm, 2, center_mean, FUN="*")
+			## col_mean <- apply(mm, 2, typical)
 			## End: 2023 Feb 09 (Thu): Focal interactions
-		}
+		## }
 
 		pred <- off + as.vector(mm %*% betahat)
 		if (include.re) {
