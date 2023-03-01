@@ -156,13 +156,12 @@ varpred <- function(mod
 	if (!is.null(x.var) & !any(focal.predictors %in% x.var) & length(focal.predictors)>1L) 
 		stop(paste0(x.var, " not in ", focal.predictors))
 
-
 	n.focal <- length(focal.predictors)
-	if (is.null(x.var) & n.focal>1L) {
-		x.var <- focal.predictors[[2]]
-		message(paste0("x.var was not specified, ", x.var, " is used instead."))
-	} else if (is.null(x.var)) {
+	if (is.null(x.var) & n.focal==1L) {
 		x.var <- focal.predictors[[1]]
+	} else if (is.null(x.var)) {
+		x.var <- focal.predictors[[length(focal.predictors)]]
+		message(paste0("x.var was not specified, ", x.var, " is used instead."))
 	}
 	
 	..focal.predictors <- focal.predictors

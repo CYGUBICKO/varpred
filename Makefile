@@ -57,6 +57,11 @@ pkgsExport.Rout: R/pkgsExport.R
 
 ######################################################################
 
+R/varpred.R.25462b7.oldfile:
+R/varpred.R.olddiff:
+R/helperfuns.R.25462b7.oldfile:
+R/helperfuns.R.olddiff:
+
 ## install required packages for vignettes 
 
 quickinstall:
