@@ -417,6 +417,7 @@ clean_model <- function(focal.predictors, mod, xlevels
   names(factor.cols) <- cnames
   
   components <- unlist(strsplit(cnames, ':'))
+  poly_check <- NULL
   for (name in all.predictors){
     ff_check <- check_factor(name, mod)
     if (ff_check) {
@@ -429,10 +430,11 @@ clean_model <- function(focal.predictors, mod, xlevels
 	 	factor.cols[grep(paste0(":", name, "|", name, ":"), cnames)] <- TRUE # FALSE for product of means as opposed to mean of products
 #	 	factor.cols[grep(paste0(":", name, "$"), cnames)] <- FALSE
       ## FIXME: Best way to identify all polynomial/function terms in a model
-		poly_check <- grep(paste("^[aA-zZ]+\\(", name, sep=""), cnames)
+		all_poly <- grep(paste("^[aA-zZ]+\\(", name, sep=""), cnames)
+		poly_check[[name]] <- length(all_poly) > 0
 		## Start: 2023 Mar 01 (Wed): Fixing poly centering	
 		## End: 2023 Mar 01 (Wed)
-		factor.cols[poly_check] <- TRUE
+		factor.cols[all_poly] <- TRUE
 	 } 
   }
 

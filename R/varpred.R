@@ -238,7 +238,7 @@ varpred <- function(mod
 		# Predictions
 		col_mean <- apply(mm, 2, typical)
 		
-		if (!input_vars & !length(poly_check)) {
+		if (!input_vars & !any(unlist(poly_check))) {
 			##	Start: 2023 Feb 09 (Thu): Focal interactions
 			center_mean <- colMeans(X.mod)
 			mm <- sweep(mm, 2, col_mean, FUN="/")
