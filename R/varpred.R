@@ -236,6 +236,15 @@ varpred <- function(mod
 		
 		# Predictions
 		col_mean <- apply(mm, 2, typical)
+		
+		## if (!input_vars) {
+			## Start: 2023 Feb 09 (Thu): Focal interactions
+			## center_mean <- colMeans(X.mod)
+			## mm <- sweep(mm, 2, col_mean, FUN="/")
+			## mm <- sweep(mm, 2, center_mean, FUN="*")
+			## col_mean <- apply(mm, 2, typical)
+			## End: 2023 Feb 09 (Thu): Focal interactions
+		## }
 
 		pse_var <- mult*get_sderror(mod=mod, vcov.=vcov., mm=mm, col_mean=col_mean, isolate=isolate
 			, isolate.value=isolate.value, internal=internal, vareff_objects=vareff_objects, x.var=x.var
@@ -257,15 +266,6 @@ varpred <- function(mod
 		)
 		off <- get_offset(offset, mf)
 		
-		## if (!input_vars) {
-			## Start: 2023 Feb 09 (Thu): Focal interactions
-			## center_mean <- colMeans(X.mod)
-			## mm <- sweep(mm, 2, col_mean, FUN="/")
-			## mm <- sweep(mm, 2, center_mean, FUN="*")
-			## col_mean <- apply(mm, 2, typical)
-			## End: 2023 Feb 09 (Thu): Focal interactions
-		## }
-
 		pred <- off + as.vector(mm %*% betahat)
 		if (include.re) {
 			re <- includeRE(mod)
