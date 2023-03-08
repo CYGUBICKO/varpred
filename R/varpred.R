@@ -219,7 +219,7 @@ varpred <- function(mod
 			, data=mf
 			, contrasts.arg=.contr
 		)
-		mm <- get_model_matrix(mod
+		mm_all <- get_model_matrix(mod
 			, mod.matrix
 			, X.mod
 			, factor.cols
@@ -232,20 +232,12 @@ varpred <- function(mod
 			, x.var=x.var
 			, factor.weights=factor.weights
 			, vnames=vnames
+			, input_vars=input_vars
+			, poly_check=poly_check
 		)
+		mm <- mm_all$mm
+		col_mean <- mm_all$col_mean
 		
-		# Predictions
-		col_mean <- apply(mm, 2, typical)
-		
-		if (!input_vars & !any(unlist(poly_check))) {
-			##	Start: 2023 Feb 09 (Thu): Focal interactions
-			center_mean <- colMeans(X.mod)
-			mm <- sweep(mm, 2, col_mean, FUN="/")
-			mm <- sweep(mm, 2, center_mean, FUN="*")
-			col_mean <- apply(mm, 2, typical)
-			## End: 2023 Feb 09 (Thu): Focal interactions
-		}
-
 		pse_var <- mult*get_sderror(mod=mod, vcov.=vcov., mm=mm, col_mean=col_mean, isolate=isolate
 			, isolate.value=isolate.value, internal=internal, vareff_objects=vareff_objects, x.var=x.var
 			, typical=typical, formula.rhs=formula.rhs
@@ -263,9 +255,12 @@ varpred <- function(mod
 			, factor.weights=factor.weights
 			, vnames=vnames
 			, .contr=.contr
+			, input_vars=input_vars
+			, poly_check=poly_check
 		)
 		off <- get_offset(offset, mf)
 		
+		# Predictions
 		pred <- off + as.vector(mm %*% betahat)
 		if (include.re) {
 			re <- includeRE(mod)

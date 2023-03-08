@@ -57,11 +57,6 @@ pkgsExport.Rout: R/pkgsExport.R
 
 ######################################################################
 
-R/varpred.R.25462b7.oldfile:
-R/varpred.R.olddiff:
-R/helperfuns.R.25462b7.oldfile:
-R/helperfuns.R.olddiff:
-
 ## install required packages for vignettes 
 
 quickinstall:
@@ -80,7 +75,7 @@ pkg-site:
 	echo "pkgdown::build_site()" | R --slave
 
 install-tarball:
-	R CMD INSTALL varpred_1.0.2.*
+	R CMD INSTALL varpred_1.0.3.*
 
 check-package:
 	echo "devtools::check('.')" | R --slave

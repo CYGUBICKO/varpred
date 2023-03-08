@@ -181,7 +181,7 @@ get_offset <- function(offset, mf) {
 	 link
 }
 
-get_sderror <- function(mod, vcov., mm, col_mean, isolate, isolate.value, internal, vareff_objects, x.var, typical, formula.rhs, mf, focal_terms=NULL, rTerms, factor.levels, bias.adjust, ..., X.mod, factor.cols, cnames, focal.predictors, excluded.predictors, apply.typical.to.factors, factor.type, factor.weights, vnames, .contr) {
+get_sderror <- function(mod, vcov., mm, col_mean, isolate, isolate.value, internal, vareff_objects, x.var, typical, formula.rhs, mf, focal_terms=NULL, rTerms, factor.levels, bias.adjust, ..., X.mod, factor.cols, cnames, focal.predictors, excluded.predictors, apply.typical.to.factors, factor.type, factor.weights, vnames, .contr, input_vars, poly_check) {
 	
 	if (is.null(vcov.)){
 		vc <- vcov(vareff_objects)
@@ -237,8 +237,10 @@ get_sderror <- function(mod, vcov., mm, col_mean, isolate, isolate.value, intern
 					, x.var=x.var
 					, factor.weights=factor.weights
 					, vnames=vnames
+					, input_vars=input_vars
+					, poly_check=poly_check
 				)
-				col_mean <- apply(mm2, 2, typical)
+				col_mean <- apply(mm2$mm, 2, typical)
 				mm_mean <- t(replicate(NROW(mm), col_mean))
 			} else {
 				mm_mean <- mod.matrix # apply(mod.matrix, 2, typical)
@@ -622,7 +624,7 @@ if (input_vars) {
 
 get_model_matrix <- function(mod, mod.matrix, X.mod, factor.cols, cnames
 	, focal.predictors, excluded.predictors, typical, apply.typical.to.factors
-	, factor.type, x.var, factor.weights, vnames){
+	, factor.type, x.var, factor.weights, vnames, input_vars, poly_check){
   attr(mod.matrix, "assign") <- attr(X.mod, "assign")
   if (length(excluded.predictors) > 0){
     strangers <- get_strangers(mod, focal.predictors, excluded.predictors)
@@ -659,7 +661,17 @@ get_model_matrix <- function(mod, mod.matrix, X.mod, factor.cols, cnames
       }
     }
   }
-  mod.matrix
+	
+	col_mean <- apply(mod.matrix, 2, typical)
+	if (!input_vars & !any(unlist(poly_check))) {
+		##	Start: 2023 Feb 09 (Thu): Focal interactions
+		center_mean <- colMeans(X.mod)
+		mod.matrix <- sweep(mod.matrix, 2, col_mean, FUN="/")
+		mod.matrix <- sweep(mod.matrix, 2, center_mean, FUN="*")
+		col_mean <- apply(mod.matrix, 2, typical)
+		## End: 2023 Feb 09 (Thu): Focal interactions
+	}
+	list(mm=mod.matrix, col_mean=col_mean)
 }
 
 
