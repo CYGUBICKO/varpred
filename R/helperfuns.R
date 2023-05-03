@@ -181,7 +181,7 @@ get_offset <- function(offset, mf) {
 	 link
 }
 
-get_sderror <- function(mod, vcov., mm, col_mean, isolate, isolate.value, internal, vareff_objects, x.var, typical, formula.rhs, mf, focal_terms=NULL, rTerms, factor.levels, bias.adjust, ..., X.mod, factor.cols, cnames, focal.predictors, excluded.predictors, apply.typical.to.factors, factor.type, factor.weights, vnames, .contr, input_vars, poly_check) {
+get_sderror <- function(mod, vcov., mm, col_mean, isolate, isolate.value, internal, vareff_objects, x.var, typical, formula.rhs, mf, focal_terms=NULL, rTerms, factor.levels, bias.adjust, ..., X.mod, factor.cols, cnames, focal.predictors, excluded.predictors, apply.typical.to.factors, factor.type, factor.weights, vnames, .contr, input_vars, poly_check, n.predictors) {
 	
 	if (is.null(vcov.)){
 		vc <- vcov(vareff_objects)
@@ -239,6 +239,7 @@ get_sderror <- function(mod, vcov., mm, col_mean, isolate, isolate.value, intern
 					, vnames=vnames
 					, input_vars=input_vars
 					, poly_check=poly_check
+					, n.predictors=n.predictors
 				)
 				col_mean <- apply(mm2$mm_temp, 2, typical)
 				mm_mean <- t(replicate(NROW(mm), col_mean))
@@ -618,13 +619,13 @@ if (input_vars) {
        factor.levels=factor.levels, factor.weights=factor.weights, 
        factor.cols=factor.cols, focal.predictors=focal.predictors, n.focal=n.focal,
        excluded.predictors=excluded.predictors, n.excluded=n.excluded,
-       x=x, X.mod=X.mod, cnames=cnames, X=X, x.var=x.var, factor.type=factor.type, poly_check=poly_check)  
+       x=x, X.mod=X.mod, cnames=cnames, X=X, x.var=x.var, factor.type=factor.type, poly_check=poly_check, n.predictors = length(all.predictors))  
 }
 
 
 get_model_matrix <- function(mod, mod.matrix, X.mod, factor.cols, cnames
 	, focal.predictors, excluded.predictors, typical, apply.typical.to.factors
-	, factor.type, x.var, factor.weights, vnames, input_vars, poly_check){
+	, factor.type, x.var, factor.weights, vnames, input_vars, poly_check, n.predictors){
   attr(mod.matrix, "assign") <- attr(X.mod, "assign")
   if (length(excluded.predictors) > 0){
     strangers <- get_strangers(mod, focal.predictors, excluded.predictors)
@@ -663,7 +664,8 @@ get_model_matrix <- function(mod, mod.matrix, X.mod, factor.cols, cnames
   }
 	mm_temp <- mod.matrix	
 	col_mean <- apply(mod.matrix, 2, typical)
-	if (!input_vars & !any(unlist(poly_check))) {
+	if (!input_vars & !any(unlist(poly_check)) & n.predictors>1) {
+		print(poly_check)
 		##	Start: 2023 Feb 09 (Thu): Focal interactions
 		center_mean <- colMeans(X.mod)
 		mod.matrix <- sweep(mod.matrix, 2, col_mean, FUN="/")

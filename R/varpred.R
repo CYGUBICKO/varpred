@@ -208,6 +208,7 @@ varpred <- function(mod
 	factor.weights <- model_frame_objs$factor.weights
 	factor.type <- model_frame_objs$factor.type
 	poly_check <- model_frame_objs$poly_check
+	n.predictors <- model_frame_objs$n.predictors
 
 	# Stats
 	mult <- get_stats(mod, level, dfspec)
@@ -234,13 +235,22 @@ varpred <- function(mod
 			, vnames=vnames
 			, input_vars=input_vars
 			, poly_check=poly_check
+			, n.predictors=n.predictors
 		)
 		mm <- mm_all$mm
 		col_mean <- mm_all$col_mean
 		
-		pse_var <- mult*get_sderror(mod=mod, vcov.=vcov., mm=mm, col_mean=col_mean, isolate=isolate
-			, isolate.value=isolate.value, internal=internal, vareff_objects=vareff_objects, x.var=x.var
-			, typical=typical, formula.rhs=formula.rhs
+		pse_var <- mult*get_sderror(mod=mod
+			, vcov.=vcov.
+			, mm=mm
+			, col_mean=col_mean
+			, isolate=isolate
+			, isolate.value=isolate.value
+			, internal=internal
+			, vareff_objects=vareff_objects
+			, x.var=x.var
+			, typical=typical
+			, formula.rhs=formula.rhs
 			, mf=predict.data # 2022 Mar 15 (Tue): re-evaluate within the isolate.value
 			, rTerms=rTerms
 			, factor.levels=factor.levels
@@ -257,6 +267,7 @@ varpred <- function(mod
 			, .contr=.contr
 			, input_vars=input_vars
 			, poly_check=poly_check
+			, n.predictors=n.predictors
 		)
 		off <- get_offset(offset, mf)
 		
@@ -370,7 +381,7 @@ varpred <- function(mod
 				data.frame(out$x, fit=as.vector(out$fit), se=as.vector(out$se)
 					, lwr=as.vector(out$lwr), upr= as.vector(out$upr))}
 	)
-
+	old_res <- result
 	if ((bias.adjust=="observed")||include.re||(include.re && all(re!=0) && bias.adjust=="none")){
 		form <- as.formula(paste0(".~", paste0(colnames(out$x), collapse = "+")))
 		result <- aggregate(form, result, FUN=function(x)mean(x, na.rm=TRUE))
@@ -385,7 +396,7 @@ varpred <- function(mod
 	attr(result, "x.var") <- out$x.var 
 	attr(result, "modelname") <- modelname
 	if (returnall) {
-		res <- list(preds = result, offset=out$offset, bias.adjust.sigma=out$bias.adjust.sigma, raw=out)
+		res <- list(preds = result, offset=out$offset, bias.adjust.sigma=out$bias.adjust.sigma, raw=out, old_res=old_res)
 	} else {
 		res <- list(preds = result, offset=out$offset, bias.adjust.sigma=out$bias.adjust.sigma)
 	}

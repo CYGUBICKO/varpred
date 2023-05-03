@@ -124,6 +124,14 @@
     , bias.adjust<span class="op">=</span><span class="st">"none"</span>
     , modelname<span class="op">=</span><span class="st">"varpred: no interaction"</span>
 <span class="op">)</span>
+<span class="co">#&gt; $wt</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $disp</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $hp</span>
+<span class="co">#&gt; [1] FALSE</span>
 
 <span class="co">## With interaction</span>
 <span class="va">vpred2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span>mod<span class="op">=</span><span class="va">mod2</span>
@@ -132,6 +140,14 @@
     , bias.adjust<span class="op">=</span><span class="st">"none"</span>
     , modelname<span class="op">=</span><span class="st">"varpred: with interaction"</span>
 <span class="op">)</span>
+<span class="co">#&gt; $wt</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $disp</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $hp</span>
+<span class="co">#&gt; [1] FALSE</span>
 <span class="va">names_use</span> <span class="op">&lt;-</span> <span class="va">vpred2</span> |&gt; <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> |&gt; <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>emmeans package</strong>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -237,6 +253,14 @@
     , <span class="st">"wt"</span>
     , modelname<span class="op">=</span><span class="st">"model center"</span>
 <span class="op">)</span>
+<span class="co">#&gt; $wt</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $disp</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $hp</span>
+<span class="co">#&gt; [1] FALSE</span>
 
 <span class="co">## varpred emmeans centering</span>
 <span class="va">emcenter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod2</span>
@@ -269,6 +293,14 @@
     , bias.adjust<span class="op">=</span><span class="st">"none"</span>
     , modelname<span class="op">=</span><span class="st">"prediction"</span>
 <span class="op">)</span>
+<span class="co">#&gt; $wt</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $disp</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $hp</span>
+<span class="co">#&gt; [1] FALSE</span>
 
 <span class="co">## Rename vpred1</span>
 <span class="va">vpred1</span><span class="op">$</span><span class="va">preds</span><span class="op">$</span><span class="va">model</span> <span class="op">&lt;-</span> <span class="st">"effects"</span>
@@ -295,6 +327,23 @@
     , isolate.value<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">wt</span><span class="op">)</span> <span class="co"># min anchor</span>
     , modelname<span class="op">=</span><span class="st">"min"</span>
 <span class="op">)</span>
+<span class="co">#&gt; $wt</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $disp</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $hp</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $wt</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $disp</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $hp</span>
+<span class="co">#&gt; [1] FALSE</span>
 
 <span class="co">## mean-anchored (default)</span>
 <span class="va">anchor0.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod1</span>
@@ -302,6 +351,14 @@
     , isolate<span class="op">=</span><span class="cn">TRUE</span>
     , modelname<span class="op">=</span><span class="st">"mean"</span>
 <span class="op">)</span>
+<span class="co">#&gt; $wt</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $disp</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $hp</span>
+<span class="co">#&gt; [1] FALSE</span>
 
 <span class="va">p3</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">anchor0</span>, <span class="va">anchor0.5</span><span class="op">)</span>
     |&gt; <span class="fu"><a href="../reference/combinevarpred.html">combinevarpred</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># No plot</span>
@@ -319,6 +376,14 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## mean-based: set bias.adjust="none"</span>
 <span class="va">vpred_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod1</span>, <span class="st">"wt"</span>, bias.adjust<span class="op">=</span><span class="st">"none"</span>, modelname<span class="op">=</span><span class="st">"mean-based"</span><span class="op">)</span>
+<span class="co">#&gt; $wt</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $disp</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $hp</span>
+<span class="co">#&gt; [1] FALSE</span>
 
 <span class="co">## observed-value: set bias.adjust="observed"</span>
 <span class="va">vpred_observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod1</span>, <span class="st">"wt"</span>, bias.adjust<span class="op">=</span><span class="st">"observed"</span>, modelname<span class="op">=</span><span class="st">"observed-value"</span><span class="op">)</span>
@@ -355,6 +420,11 @@
 <span class="co"># Effect plots</span>
 <span class="co">## Mean-based</span>
 <span class="va">ef_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"age"</span>, steps<span class="op">=</span><span class="va">steps</span>, bias.adjust<span class="op">=</span><span class="st">"none"</span>, modelname<span class="op">=</span><span class="st">"mean-based"</span><span class="op">)</span>
+<span class="co">#&gt; $age</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $income</span>
+<span class="co">#&gt; [1] FALSE</span>
 <span class="co">## Observed-value-based</span>
 <span class="va">ef_observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"age"</span>, steps<span class="op">=</span><span class="va">steps</span>, bias.adjust<span class="op">=</span><span class="st">"observed"</span>, modelname<span class="op">=</span><span class="st">"observed-value"</span><span class="op">)</span></code></pre></div>
 <p>We write a simple function to add binned observations, i.e., proportion of observed outcomes falling within particular bin:</p>
