@@ -16,7 +16,7 @@ pop.bias.adjust <- function(x.focal, x.excluded, betahat, formula.rhs
 	}
 
 
- 	if (isolate) {
+#  	if (isolate) {
 		## UPDATE: 2022 Jun 18 (Sat) 
 		### Applies to both cases
 		if (!is.null(x.excluded)) {
@@ -44,12 +44,12 @@ pop.bias.adjust <- function(x.focal, x.excluded, betahat, formula.rhs
 		}
 		focal_mm <- model.matrix(formula.rhs_update, data = focal_mf, contrasts.arg = contr_update)
 		focal_terms_update <- colnames(focal_mm) #attr(terms(formula.rhs_update), "term.labels")
- 	} else {
- 		focal_mf <- model.frame(mod)
- 		focal_mm <- mm
- 		focal_terms_update <- NULL
- 		contr_update <- contr
- 	}
+#  	} else {
+#  		focal_mf <- model.frame(mod)
+#  		focal_mm <- mm
+#  		focal_terms_update <- NULL
+#  		contr_update <- contr
+#  	}
 	col_mean <- colMeans(focal_mm)
 	
 	pse_var <- mult*get_sderror(mod=mod
@@ -529,7 +529,7 @@ if (input_vars) {
 		)
 	 }
     if (!fac) {
-	 	if (!is.null(isolate.value) & (is.numeric(isolate.value)|is.integer(isolate.value))) {
+		if (!is.null(isolate.value) & (is.numeric(isolate.value)|is.integer(isolate.value))) {
 			levels <- c(levels, isolate.value)
 		} else {
 			levels <- c(levels, typical(levels))
