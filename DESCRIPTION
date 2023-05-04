@@ -1,6 +1,6 @@
 Package: varpred
 Title: Outcome Plots
-Version: 1.0.3
+Version: 1.0.4
 Authors@R: 
 	c(person("Bicko","Cygu", 
 		role=c("aut","cre"),

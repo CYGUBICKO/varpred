@@ -75,7 +75,7 @@ pkg-site:
 	echo "pkgdown::build_site()" | R --slave
 
 install-tarball:
-	R CMD INSTALL varpred_1.0.3.*
+	R CMD INSTALL varpred_1.0.4.*
 
 check-package:
 	echo "devtools::check('.')" | R --slave
