@@ -99,12 +99,6 @@
 <span class="r-in"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">hp</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="co">## Effect</span></span>
 <span class="r-in"><span class="va">ef</span> <span class="op">&lt;-</span> <span class="fu"><a href="varpred.html">varpred</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"wt"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $wt</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $hp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ef</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         wt      fit        se      lwr      upr</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1.513000 26.68754 1.0763972 24.48606 28.88902</span>

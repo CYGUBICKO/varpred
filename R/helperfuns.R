@@ -665,7 +665,6 @@ get_model_matrix <- function(mod, mod.matrix, X.mod, factor.cols, cnames
 	mm_temp <- mod.matrix	
 	col_mean <- apply(mod.matrix, 2, typical)
 	if (!input_vars & !any(unlist(poly_check)) & n.predictors>1) {
-		print(poly_check)
 		##	Start: 2023 Feb 09 (Thu): Focal interactions
 		center_mean <- colMeans(X.mod)
 		mod.matrix <- sweep(mod.matrix, 2, col_mean, FUN="/")
